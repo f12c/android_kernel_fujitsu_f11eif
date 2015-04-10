@@ -60,9 +60,6 @@
 #define VISION_ACPU_MIN_UV_MV 750U
 #define VISION_ACPU_MAX_UV_MV 1525U
 
-#define OCUV 1
-#define OC 0
-
 struct clock_state {
 	struct clkctl_acpu_speed	*current_speed;
 	struct mutex			lock;
@@ -123,7 +120,7 @@ static struct pll pll2_tbl[] = {
  * know all the h/w requirements.
  */
 
-#if OCUV
+#ifdef CONFIG_MSM_7X30_UNDERVOLTAGE
 static struct clkctl_acpu_speed acpu_freq_tbl[] = {
 	{ 0, 24576,  SRC_LPXO, 0, 0,  30720000,  750, VDD_RAW(750) },	//900
 	{ 0, 61440,  PLL_3,    5, 11, 61440000,  750, VDD_RAW(750) },	//900
@@ -515,9 +512,7 @@ void __init pll2_fixup(void)
 		if (speed->src != PLL_2)
 			backup_s = speed;
 		if (speed->pll_rate && speed->pll_rate->l == pll2_l) {
-#if OCUV
-			speed+=3	;	//speed++;
-#elif OC
+#ifdef CONFIG_MSM_7X30_OVERCLOCK
 			speed+=3	;	//speed++;
 #else
 			speed++	;	//speed++;

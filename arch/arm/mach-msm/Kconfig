@@ -1343,4 +1343,14 @@ config MSM_SCHED_FAST_CPU_ONLINE
 	  Bypass scheduler domain reconstruction when onlining the second
 	  CPU on 8X60 to speed up operation.
 
+config MSM_7X30_OVERCLOCK
+	bool "Allow MSM 7x30 to overclock"
+	help
+	  over clock
+
+config MSM_7X30_UNDERVOLTAGE
+	bool "Allow MSM 7x30 to under-voltage"
+	help
+	  under-voltage
+
 endif
