@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.35.7
-# Tue Aug 12 09:30:49 2014
+# Fri Apr 10 20:30:59 2015
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -393,6 +393,8 @@ CONFIG_MSM_GPIOMUX=y
 # CONFIG_MSM_BUS_SCALING is not set
 CONFIG_MSM_STANDALONE_POWER_COLLAPSE=y
 # CONFIG_MSM_GSBI9_UART is not set
+CONFIG_MSM_7X30_OVERCLOCK=y
+CONFIG_MSM_7X30_UNDERVOLTAGE=y
 
 #
 # Processor Type
