@@ -1,0 +1,66 @@
+Chinese translated version of Documentation/stable_kernel_rules.txt
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Chinese maintainer: TripleX Chung <triplex@zh-kernel.org>
+---------------------------------------------------------------------
+Documentation/stable_kernel_rules.txt 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+
+中文版者： 宇  TripleX Chung <triplex@zh-kernel.org>
+中文版翻者： 宇  TripleX Chung <triplex@zh-kernel.org>
+中文版校者： 李  Li Yang <leo@zh-kernel.org>
+               Kangkai Yin <e12051@motorola.com>
+
+以下正文
+---------------------------------------------------------------------
+
+于Linux 2.6定版布，所有想知道的事情。
+
+于些型的丁可以被接收入定版代，些不可以的：
+
+  - 必是而易的正，并且的。
+  - 同上下文，不能大于100行。
+  - 必只修正一件事情。
+  - 必修正了一个大家来麻的真正的bug（不是“也是一个...”
+    那的西）。
+  - 必修正来如下后果的：（被CONFIG_BROKEN的例外），
+    内核崩，挂起，数据坏，真正的安全，或者一些似“哦，不
+    好”的。短的，就是一些致命的。
+  - 没有“理上的争条件”，除非能出争条件如何被利用的解。
+  - 不能存在任何的“碎的”修正（写修正，去掉多余空格之的）。
+  - 必被相子系的者接受。
+  - 必遵循Documentation/SubmittingPatches里的。
+
+向定版代提交丁的程：
+
+  - 在了丁符合以上的后，将丁送到stable@kernel.org。
+  - 如果丁被接受到列里，送者会收到一个ACK回，如果没有被接受，收
+    到的是NAK回。回需要几天的，取决于者的安排。
+  - 被接受的丁会被加到定版本列里，等待其他者的。
+  - 安全方面的丁不要到个列表，送到security@kernel.org。
+
+周期：
+
+  - 当定版的者决定始一个周期，丁将被送到委会，以
+    及被丁影的域的者（除非提交者就是域的者）并且抄送
+    到linux-kernel件列表。
+  - 委会有48小的，用来决定丁回ACK是NAK。
+  - 如果委会中有成拒个丁，或者linux-kernel列表上有人反个
+    丁，并提出者和委会之前没有意到的，丁会从列中
+    弃。
+  - 在周期束的候，那些得到ACK回的丁将会被加入到最新的定版
+    布中，一个新的定版布就此生。
+  - 安全性丁将从内核安全小那里直接接收到定版代中，而不是通
+    通常的周期。系内核安全小以得于个程的更多。
+
+委会：
+  - 由一些自愿承担任的内核者，和几个非志愿的成。

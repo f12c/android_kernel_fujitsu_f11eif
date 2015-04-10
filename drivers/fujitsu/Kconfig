@@ -1,0 +1,48 @@
+#
+# fujitsu f11eif device driver
+#
+
+menuconfig FUJITSU_F11EIF
+	bool "Fujitsu f11eif drivers"
+	default y
+	---help---
+	  Say Y here to get to see options for device drivers from various
+	  different categories. This option alone does not add any kernel code.
+
+	  If you say N, all options in this submenu will be skipped and disabled.
+
+if FUJITSU_F11EIF
+
+config FUJITSU_EIFFEL_PROXIMITY
+	bool "Fujitsu Proximity sensor Devices driver"
+	default y
+	---help---
+	  If you say yes here you get support for the Eiffel Proximity sensor
+	  chips.
+
+	  This driver can also be built as a module. If so, the module
+	  will be called proximity sensor.
+
+config FUJITSU_EIFFEL_ILLUMI
+	bool "Fujitsu Illuminance sensor Devices driver"
+	depends on FUJITSU_EIFFEL_PROXIMITY
+	default y
+	---help---
+	  If you say yes here you get support for the Eiffel Illuminance
+	  sensor chips.
+
+	  This driver can also be built as a module. If so, the module
+	  will be called proximity sensor.
+
+source "drivers/fujitsu/keypad/Kconfig"
+
+config FUJITSU_F11EIF_STSCHK
+	bool "Fujitsu Status Check driver"
+	default y
+	---help---
+	  Say Y here if you want to enable the driver for the F11EIF's ststus check.
+	  This is the driver to check root hackking.
+
+	  the module will be called system call.
+
+endif # FUJITSU_F11EIF

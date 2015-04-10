@@ -1,0 +1,6 @@
+menu "Fujitsu WAVE-IF support"
+
+config FUJITSU_WAVEIF
+	tristate "Fujitsu WAVE Interface Driver"
+	default y
+endmenu

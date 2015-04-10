@@ -1,0 +1,416 @@
+Chinese translated version of Documentation/SubmittingPatches
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Chinese maintainer: TripleX Chung <triplex@zh-kernel.org>
+---------------------------------------------------------------------
+Documentation/SubmittingPatches 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+中文版者： 宇 TripleX Chung <triplex@zh-kernel.org>
+中文版翻者： 宇 TripleX Chung <triplex@zh-kernel.org>
+中文版校者： 李 Li Yang <leo@zh-kernel.org>
+               王 Wang Cong <xiyou.wangcong@gmail.com>
+
+以下正文
+---------------------------------------------------------------------
+
+   如何的改入内核
+     或者
+  得的 Linus Torvalds 的注和理
+----------------------------------
+
+于想要将改提交到 Linux 内核的个人或者公司来，如果不熟悉“矩”，
+提交的流程会人畏惧。本文档收集了一系列建，些建可以大大的提高
+的改被接受的机会。
+ Documentation/SubmitChecklist 来得在提交代前需要的目的列
+表。如果在提交一个程序，那同一下
+Documentation/SubmittingDrivers 。
+
+
+--------------------------
+第一 - 建并送的改
+--------------------------
+
+1) "diff -up"
+-----------
+
+使用 "diff -up" 或者 "diff -uprN" 来建丁。
+
+所有内核的改，都是以丁的形式呈的，丁由 diff(1) 生成。建丁的
+候，要它是以 "unified diff" 格式建的，格式由 diff(1) 的 '-u'
+参数生成。而且，使用 '-p' 参数，那会示个改所在的C函数，使得
+生的丁容易得多。丁基于内核源代的根目，而不是里的任
+何子目。
+一个独的文件建丁，一般来做就了：
+
+        SRCTREE= linux-2.6
+        MYFILE=  drivers/net/mydriver.c
+
+        cd $SRCTREE
+        cp $MYFILE $MYFILE.orig
+        vi $MYFILE      # make your change
+        cd ..
+        diff -up $SRCTREE/$MYFILE{.orig,} > /tmp/patch
+
+多个文件建丁，可以解一个没有修改的内核源代，然后和自
+己的代之做 diff 。例如：
+
+        MYSRC= /devel/linux-2.6
+
+        tar xvfz linux-2.6.12.tar.gz
+        mv linux-2.6.12 linux-2.6.12-vanilla
+        diff -uprN -X linux-2.6.12-vanilla/Documentation/dontdiff \
+                linux-2.6.12-vanilla $MYSRC > /tmp/patch
+
+"dontdiff" 是内核在的候生的文件的列表，列表中的文件在 diff(1)
+生的丁里会被跳。"dontdiff" 文件被包含在2.6.12和之后版本的内核源代
+中。于更早的内核版本，可以从
+<http://www.xenotime.net/linux/doc/dontdiff> 取它。
+定的丁里没有包含任何不属于次丁提交的外文件。得在用diff(1)
+生成丁之后，一次丁，以保准。
+如果的改很散乱，研究一下如何将丁分割成独立的部分，将改分
+割成一系列合乎的。更容易其他内核者核，如果想的
+丁被接受，是很重要的。下面些脚本能助做件事情：
+Quilt:
+http://savannah.nongnu.org/projects/quilt
+
+Andrew Morton 的丁脚本:
+http://www.zip.com.au/~akpm/linux/patches/
+作些脚本的替代，quilt 是得推荐的丁管理工具(看上面的接)。
+
+2)描述的改。
+描述的改包含的技。
+
+要多具体就写多具体。最糟的描述可能是像下面些句：“更新了某程
+序”，“修正了某程序的bug”，或者“个丁包含了某子系的修改，
+使用。”
+
+如果的描述始，表示也需要拆分的丁了，看第3小，
+。
+
+3)拆分的改
+
+将改拆分，似的放到同一个丁文件里。
+
+例如，如果的改里同有bug修正和性能化，那把些改才分到个或
+者更多的丁文件中。如果的改包含API的修改，并且修改了程序来
+些新的API，那把些修改分成个丁。
+
+一方面，如果将一个独的改做成多个丁文件，那将它合并成一个
+独的丁文件。一个上独的改只被包含在一个丁文件里。
+
+如果有一个丁依外一个丁来完成它的改，那没。的在的
+丁描述里指出“个丁依某丁”就好了。
+
+如果不能将丁成更少的文件，那次大送出15个，然后等待
+和整合。
+
+4) e-mail 的收件人
+
+看一遍 MAINTAINERS 文件和源代，看看所的改所在的内核子系有没有指
+定的者。如果有，他e-mail。
+
+如果没有找到者，或者者没有反，将的丁送到内核者主
+件列表 linux-kernel@vger.kernel.org。大部分的内核者都跟踪个件列
+表，可以价的改。
+
+次不要送超15个丁到 vger 件列表！！！
+
+Linus Torvalds 是决定改能否入 Linux 内核的最裁决者。他的 e-mail
+地址是 <torvalds@linux-foundation.org> 。他收到的 e-mail 很多，所以一般
+的，最好他 e-mail。
+
+那些修正bug，“而易”的修改或者是似的只需要很少的丁可以直接
+送或者CCLinus。那些需要或者没有很清楚的好的丁，一般先送到
+linux-kernel件列表。只有当丁被得差不多了，才提交Linus。
+
+5)CC( e-mail 抄送)列表
+
+除非有理由不做，否CC linux-kernel@vger.kernel.org。
+
+除了 Linus 之外，其他内核者也需要注意到的改，他才能
+的改并提供代和建。linux-kernel 是 Linux 内核者主件列表
+。其它的件列表特定的子系提供服，比如 USB，framebuffer ，虚
+文件系，SCSI 子系，等等。看 MAINTAINERS 文件来得和的改有
+的件列表。
+
+Majordomo lists of VGER.KERNEL.ORG at:
+        <http://vger.kernel.org/vger-lists.html>
+
+如果改影了用空和内核之的接口， MAN-PAGES 的者（列在
+MAITAINERS 文件里的）送一个手册（man-pages）丁，或者至少通知一下改
+，一些信息有途径入手册。
+
+即使在第四的候，者没有作出回，也要在修改他的代的候
+，一直将者拷到CC列表中。
+
+于小的丁，也会CC到 Adrian Bunk 管理的搜集碎丁的件列表
+(Trivial Patch Monkey)trivial@kernel.org，那里收集碎的丁。下面
+的丁会被看作“碎的”丁：
+  文档的写修正。
+  修正会影到 grep(1) 的写。
+  警告信息修正(繁的打印无用的警告是不好的。)
+  修正（代的是的，只是有。）
+  行修正（只要真的修正了。）
+  移除使用了被弃的函数/宏的代(例如 check_region。)
+  系方式和文档修正。
+  用可移植的代替不可移植的代（即使在体系相的代中，既然有
+  人拷，只要它是碎的）
+  任何文件的作者/者文件的改（例如 patch monkey 在重模式下）
+
+URL: <http://www.kernel.org/pub/linux/kernel/people/bunk/trivial/>
+
+(注，于“碎丁”的一些明：因原文的一部分写得比，所以不得不
+例写一下注。"trivial"个英文的本意是“碎的，不重要的。”但是在里
+有稍微有一些化，例如一些明的NULL指的修正，属于行修正，会被
+到碎丁里。然NULL指的修正很重要，但是的修正往往很小而且很容易得到
+，所以也被入碎丁。碎丁更精的是
+“simple, localized & easy to verify”，也就是的，局部的和易于的。
+trivial@kernel.org件列表的目的是的丁，提交者提供一个中心，来
+降低提交的。)
+
+6)没有 MIME ，没有接，没有，没有附件，只有文本。
+
+Linus 和其他的内核者需要和提交的改。于内核者来
+，可以“引用”的改很重要，使用一般的 e-mail 工具，他就可以在的
+代的任何位置添加。
+
+因个原因，所有的提交的丁都是 e-mail 中“内嵌”的。
+警告：如果使用剪切-粘的丁，小心的器的自行功能破坏的
+丁。
+
+不要将丁作 MIME 的附件，不管是否。很多流行的 e-mail 件不
+是任何候都将 MIME 的附件当作文本送的，会使得人无法在的
+代中加。外，MIME 的附件会 Linus 多花一点来理，就
+降低了的改被接受的可能性。
+
+警告：一些件件，比如 Mozilla 会将的信息以如下格式送：
+---- 件 ----
+Content-Type: text/plain; charset=us-ascii; format=flowed
+---- 件 ----
+在于 “format=flowed” 会接收端的某些件件将件中的制表符替
+成空格以及做一些似的替。，送的候看起来没的丁就被破
+坏了。
+
+要修正个，只需要将的 mozilla 的 defaults/pref/mailnews.js 文件
+里的
+pref("mailnews.send_plaintext_flowed", false); // RFC 2646=======
+修改成
+pref("mailnews.display.disable_format_flowed_support", true);
+就可以了。
+
+7) e-mail 的大小
+
+ Linus 送丁的候，永按照第6小的做。
+
+大的改件列表不合，某些者也不合。如果的丁，在不
+的情况下，超了40kB，那最好将丁放在一个能通 internet 的服
+器上，然后用指向的丁的 URL 替代。
+
+8) 指出的内核版本
+
+在和在丁的描述中，指出丁的内核的版本，是很重要的。
+
+如果丁不能干的在最新版本的内核上打上，Linus 是不会接受它的。
+
+9) 不要气，提交。
+
+当提交了改以后，耐心地等待。如果 Linus 喜的改并且同意它，那
+它将在下一个内核布版本中出。
+
+然而，如果的改没有出在下一个版本的内核中，可能有若干原因。少那
+些原因，修正，重新提交更新后的改，是自己的工作。
+
+Linus不出任何就“弃”的丁是常的事情。在系中的事情很
+平常。如果他没有接受的丁，也是由于以下原本：
+* 的丁不能在最新版本的内核上干的打上。
+* 的丁在 linux-kernel 件列表中没有得到充分的。
+* 格（参照第2小）
+* 件格式（重本）
+* 的改有技。
+* 他收到了成的 e-mail，而的在混乱中失了。
+* 人。
+
+有疑的候，在 linux-kernel 件列表上求。
+
+10) 在上加上 PATCH 的字
+
+Linus 和 linux-kernel 件列表的 e-mail 流量都很高，一个通常的定是
+行以 [PATCH] 。可以 Linus 和其他内核人可以从 e-mail
+的中很易的将丁分辨出来。
+
+11）的工作名
+
+了加做了何事的追踪，尤其是那些透好几的者的丁，我
+建在送出去的丁上加一个 “sign-off” 的程。
+
+"sign-off" 是在丁的注的最后的的一行文字，写了它或者其他
+人有力将它作放源代的丁。很：如果能如下信息
+：
+      者来源 1.1
+      于本目的献，我如下信息：
+      （a）些献是完全或者部分的由我建，我有利以文件中指出
+       的放源代可提交它；或者
+      （b）些献基于以前的工作，据我所知，些以前的工作受恰当的放
+       源代可保，而且，根据可，我有提交修改后的献，
+       无是完全是部分由我造，些献都使用同一个放源代可
+       （除非我被允用其它的可），正如文件中指出的；或者
+      （c）些献由（a），（b）或者（c）的人直接提供我，而
+       且我没有修改它。
+      （d）我理解并同意个目和献是公的，献的（包括我
+       一起提交的个人，包括 sign-off ）被永久并且可以和个目
+       或者放源代的可同地再行。
+       那加入一行：
+       Signed-off-by: Random J Developer <random@developer.example.org>
+
+使用的真名（抱歉，不能使用假名或者匿名。）
+
+有人在最后加上。在些西会被忽略，但是可以做，来公司
+内部的程，或者只是指出于 sign-off 的一些特殊。
+
+12）准丁格式
+
+准的丁，行是：
+    Subject: [PATCH 001/123] 子系:一句概述
+
+准丁的信体存在如下部分：
+
+  - 一个 "from" 行指出丁作者。
+
+  - 一个空行
+
+  - 明的主体，些明文字会被拷到描述丁的永久改里。
+
+  - 一个由"---"成的行
+
+  - 不合放到改里的外的注解。
+
+  - 丁本身（diff 出）
+
+行的格式，使得行按字母序排序非常的容易 - 很多 e-mail 客端都
+可以支持 - 因序列号是用零填充的，所以按数字排序和按字母排序是一的。
+
+e-mail 中的“子系”个内核子系将被打丁。
+
+e-mail 中的“一句概述”扼要的描述 e-mail 中的丁。“一句概述”
+不是一个文件名。于一个丁系列（“丁系列”指一系列的多个相
+丁），不要个丁都使用同的“一句概述”。
+
+住 e-mail 的“一句概述”会成丁的全局唯一。它会蔓延到 git
+的改里。然后“一句概述”会被用在者的里，用来指代个
+丁。用将希望通 google 来搜索"一句概述"来找到那些个丁的文
+章。
+
+一些的例子：
+
+    Subject: [patch 2/5] ext2: improve scalability of bitmap searching
+    Subject: [PATCHv2 001/207] x86: fix eflags tracking
+
+"from" 行是信体里的最上面一行，具有如下格式：
+        From: Original Author <author@example.com>
+
+"from" 行指明在永久改日志里，会被作者。如果没有 "from" 行，那
+件里的 "From: " 行会被用来决定改日志中的作者。
+
+明的主将会被提交到永久的源代改日志里，因此那些早已不得和
+个丁相的的有能力的者来，是有意的。
+
+"---" 行于丁理工具要找到里是改日志信息的束，是不可缺少
+的。
+
+于 "---" 之后的外注解，一个好的用途就是用来写 diffstat，用来
+示修改了什文件和个文件都增加和除了多少行。diffstat 于比大的
+丁特有用。其余那些只是和刻或者者相的注解，不合放到永久的改
+日志里的，也放里。
+使用 diffstat的 "-p 1 -w 70" 文件名就会从内核源代的目始
+，不会占用太的空（很容易合80列的度，也会有一些。）
+
+在后面的参考料中能看到当的丁格式的更多。
+
+-------------------------------
+第二 提示，建和
+-------------------------------
+
+本包含很多和提交到内核的代有的通常的""。事情永有例外...但是
+必真的有好的理由做。可以把本叫做Linus的算机科学入。
+
+1)  Document/CodingStyle
+
+Nuff ，如果的代和个偏太多，那它有可能会被拒，没有更多的
+，没有更多的价。
+
+2) #ifdef 是丑陋的
+混了 ifdef 的代以和。做。作替代，将的 ifdef 放
+在文件里，有条件地定 "static inline" 函数，或者宏，在代里用些
+西。器把那些"空操作"化掉。
+
+一个的例子，不好的代：
+
+    dev = alloc_etherdev (sizeof(struct funky_private));
+    if (!dev)
+        return -ENODEV;
+    #ifdef CONFIG_NET_FUNKINESS
+    init_funky_net(dev);
+    #endif
+
+清理后的例子:
+
+(文件里)
+    #ifndef CONFIG_NET_FUNKINESS
+    static inline void init_funky_net (struct net_device *d) {}
+    #endif
+
+(代文件里)
+    dev = alloc_etherdev (sizeof(struct funky_private));
+    if (!dev)
+        return -ENODEV;
+    init_funky_net(dev);
+
+3) 'static inline' 比宏好
+
+Static inline 函数相比宏来，是好得多的。Static inline 函数提供了
+型安全，没有度限制，没有格式限制，在 gcc 下和宏一小。
+
+宏只在 static inline 函数不是最的候[在 fast paths 里有很少的独立的
+案例]，或者不可能用 static inline 函数的候[例如字符串分配]。
+用 'static inline' 而不是 'static __inline__', 'extern inline' 和
+'extern __inline__' 。
+
+4) 不要度
+
+不要模糊的未来事情，些事情也有用也没有用："事情尽可能的
+，而不是更"。
+
+----------------
+第三 参考文献
+----------------
+
+Andrew Morton, "The perfect patch" (tpp).
+  <http://www.zip.com.au/~akpm/linux/patches/stuff/tpp.txt>
+
+Jeff Garzik, "Linux kernel patch submission format".
+  <http://linux.yyz.us/patch-format.html>
+
+Greg Kroah-Hartman, "How to piss off a kernel subsystem maintainer".
+  <http://www.kroah.com/log/2005/03/31/>
+  <http://www.kroah.com/log/2005/07/08/>
+  <http://www.kroah.com/log/2005/10/19/>
+  <http://www.kroah.com/log/2006/01/11/>
+
+NO!!!! No more huge patch bombs to linux-kernel@vger.kernel.org people!
+  <http://marc.theaimsgroup.com/?l=linux-kernel&m=112112749912944&w=2>
+
+Kernel Documentation/CodingStyle:
+  <http://sosdg.org/~coywolf/lxr/source/Documentation/CodingStyle>
+
+Linus Torvalds's mail on the canonical patch format:
+  <http://lkml.org/lkml/2005/4/7/183>
+--

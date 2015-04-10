@@ -1,0 +1,212 @@
+Chinese translated version of Documentation/oops-tracing.txt
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Chinese maintainer: Dave Young <hidave.darkstar@gmail.com>
+---------------------------------------------------------------------
+Documentation/oops-tracing.txt 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+中文版者： 瑞 Dave Young <hidave.darkstar@gmail.com>
+中文版翻者： 瑞 Dave Young <hidave.darkstar@gmail.com>
+中文版校者： 李 Li Yang <leo@zh-kernel.org>
+               王 Wang Cong <xiyou.wangcong@gmail.com>
+
+以下正文
+---------------------------------------------------------------------
+
+注意： ksymoops 在2.6中是没有用的。 以原有格式使用Oops(来自dmesg，等等)。
+忽略任何那于“解Oops”或者“通ksymoops行”的文档。 如果出行
+ksymoops的来自2.6的Oops，人只会重一次。
+
+快速
+-------------
+
+Oops并送看似相的内核域的者。太担心不上号。如果不定就
+和所做的事情相的代的人。 如果可重着描述怎重。 那甚至比oops更有
+价。
+
+如果于送一无所知， linux-kernel@vger.kernel.org。感助Linux
+尽可能地定。
+
+Oops在里?
+----------------------
+
+通常Oops文本由klogd从内核冲区里取并syslogd，由syslogd写到syslog文件中，
+典型地是/var/log/messages(依于/etc/syslog.conf)。有klogd崩了,情况下
+能行dmesg > file来从内核冲区中取数据并保存下来。 否可以
+cat /proc/kmsg > file， 然而必介入中止， kmsg是一个“永不束的文件”。如
+果机器崩坏到不能入命令或者磁不可用那有三:-
+
+（1） 手抄屏幕上的文本待机器重后再入算机。 麻但如果没有崩的准，
+是有的。 外，可以用数相机把屏幕拍下来-不太好，但比没有。 如果信
+息到了端的上面，会以高分率（比如，vga=791）会到更多的文
+本。（注意：需要vesafb，所以‘早期’的oops没有助）
+
+（2）用串口端（参看Documentation/serial-console.txt），行一个null
+modem到一台机器并用喜的通工具取出。Minicom工作地很好。
+
+（3）使用Kdump（参看Documentation/kdump/kdump.txt），
+使用在Documentation/kdump/gdbmacros.txt中定的dmesg gdb宏，从旧的内存中提取内核
+形冲区。
+
+完整信息
+----------------
+
+注意：以下来自于Linus的件用于2.4内核。 我因史原因保留了它，并且因其中
+一些信息仍然用。 特注意的是，忽略任何ksymoops的引用。
+
+From: Linus Torvalds <torvalds@osdl.org>
+
+怎跟踪Oops.. [原到linux-kernel的一封件]
+
+主要的是有五年和些人的oops消息打交道的;-)
+
+上，有法使它更。我有个不同的方法：
+
+	gdb /usr/src/linux/vmlinux
+	gdb> disassemble <offending_function>
+
+那是的法，至少如果bug告做的好的情况下（象个一-行ksymoops
+得到oops生的函数及函数内的偏移）。
+
+哦，如果告生的内核以相同的器和相似的配置它会有助的。
+
+一件要做的事是反bug告的“Code”部分：ksymoops也会用正的工具来做件事，
+但如果没有那些工具可以写一个程序：
+
+	char str[] = "\xXX\xXX\xXX...";
+	main(){}
+
+并用gcc -g它然后行“disassemble str”（XX部分是由Oops告的-可以剪切
+粘并用“\x”替空格-我就是做的，因我得写程序自做一切）。
+
+外，可以用scripts/decodecode个shell脚本。它的使用方法是：
+decodecode < oops.txt
+
+“Code”之后的十六制字可能（在某些架上）有一些当前指令之前的指令字以及
+当前和之后的指令字
+
+Code: f9 0f 8d f9 00 00 00 8d 42 0c e8 dd 26 11 c7 a1 60 ea 2b f9 8b 50 08 a1
+64 ea 2b f9 8d 34 82 8b 1e 85 db 74 6d 8b 15 60 ea 2b f9 <8b> 43 04 39 42 54
+7e 04 40 89 42 54 8b 43 04 3b 05 00 f6 52 c0
+
+最后，如果想知道代来自里，可以：
+
+	cd /usr/src/linux
+	make fs/buffer.s 	# 或任何生BUG的文件
+
+然后会比gdb反更清楚的知道生了什。
+
+在，是把所有的所有数据合起来：C源（于它怎的一般知），
+代及其反得到的代（外有从“oops”消息得到的寄存器状-了解坏的
+指有用，而且当有了代也能拿其它的寄存器和任何它的C表式做匹配
+）。
+
+上，需看看里不匹配（个例子是“Code”反和器生成的代不匹配）。
+然后要找出什不匹配。通常很-看到代使用了空指然后看代想知道
+空指是怎出的，有它是否合法..
+
+在，如果明白是一耗的工作而且需要一丁点儿的心，没。就是我什大多
+只是忽略那些没有符号表信息的崩告的原因：的太找了（我有一些
+程序用于在内核代段中搜索特定的模式，而且有我也已能找出那些崩的地方，但是
+是找出正的序列也需要相当扎的内核知）
+
+_有_会生情况，我看到崩中的反代序列， 然后我上就明白出在
+里。我才意到自己干个工作已太了;-)
+
+		Linus
+
+
+---------------------------------------------------------------------------
+于Oops跟踪的注解：
+
+了助Linus和其它内核者，klogd入了大量的支持来理保。了有
+地址解析的完整支持至少使用1.3-pl3的sysklogd包。
+
+当保生，klogd守程自把内核日志信息中的重要地址翻成它相的符
+号。
+
+klogd行型的地址解析。首先是静翻其次是翻。静翻和ksymoops
+一使用System.map文件。了做静翻klogd守程必在初始化能找到system
+map文件。于klogd怎搜索map文件参看klogd手册。
+
+地址翻在使用内核可装模很重要。 因内核模的内存是从内核内存池
+里分配的，所以不管是模始位置是模中函数和符号的位置都不是固定的。
+
+内核支持允程序决定装些模和它在内存中位置的系用。使用些系用
+klogd守程生成一符号表用于生在可装模中的保。
+
+至少klogd会提供生保的模名。可有外的符号信息供可装模者
+以从模中出符号信息。
+
+因内核模境可能是的，所以必有一机制当模境生改来通知klogd
+守程。 有一些可用的命令行允klogd向当前行中的守程送信号，告知符
+号信息被刷新了。 更多信息参看klogd手册。
+
+sysklogd布包含一个丁修改了modules-2.0.0包，无何一个模装或者卸都
+会自向klogd送信号。打上个丁提供了必要的生于内核可装模的保
+的无支持。
+
+以下是被klogd理的生在可装模中的一个保例子：
+---------------------------------------------------------------------------
+Aug 29 09:51:01 blizard kernel: Unable to handle kernel paging request at virtual address f15e97cc
+Aug 29 09:51:01 blizard kernel: current->tss.cr3 = 0062d000, %cr3 = 0062d000
+Aug 29 09:51:01 blizard kernel: *pde = 00000000
+Aug 29 09:51:01 blizard kernel: Oops: 0002
+Aug 29 09:51:01 blizard kernel: CPU:    0
+Aug 29 09:51:01 blizard kernel: EIP:    0010:[oops:_oops+16/3868]
+Aug 29 09:51:01 blizard kernel: EFLAGS: 00010212
+Aug 29 09:51:01 blizard kernel: eax: 315e97cc   ebx: 003a6f80   ecx: 001be77b   edx: 00237c0c
+Aug 29 09:51:01 blizard kernel: esi: 00000000   edi: bffffdb3   ebp: 00589f90   esp: 00589f8c
+Aug 29 09:51:01 blizard kernel: ds: 0018   es: 0018   fs: 002b   gs: 002b   ss: 0018
+Aug 29 09:51:01 blizard kernel: Process oops_test (pid: 3374, process nr: 21, stackpage=00589000)
+Aug 29 09:51:01 blizard kernel: Stack: 315e97cc 00589f98 0100b0b4 bffffed4 0012e38e 00240c64 003a6f80 00000001
+Aug 29 09:51:01 blizard kernel:        00000000 00237810 bfffff00 0010a7fa 00000003 00000001 00000000 bfffff00
+Aug 29 09:51:01 blizard kernel:        bffffdb3 bffffed4 ffffffda 0000002b 0007002b 0000002b 0000002b 00000036
+Aug 29 09:51:01 blizard kernel: Call Trace: [oops:_oops_ioctl+48/80] [_sys_ioctl+254/272] [_system_call+82/128]
+Aug 29 09:51:01 blizard kernel: Code: c7 00 05 00 00 00 eb 08 90 90 90 90 90 90 90 90 89 ec 5d c3
+---------------------------------------------------------------------------
+
+Dr. G.W. Wettstein           Oncology Research Div. Computing Facility
+Roger Maris Cancer Center    INTERNET: greg@wind.rmcc.com
+820 4th St. N.
+Fargo, ND  58122
+Phone: 701-234-7556
+
+
+---------------------------------------------------------------------------
+受染的内核
+
+一些oops告在程序数器之后包含字符串'Tainted: '。表明内核已被一些西
+染了。 字符串之后跟着一系列的位置敏感的字符，个代表一个特定的染。
+
+  1：'G'如果所有装的模都有GPL或相容的可，'P'如果装了任何的有模。
+没有模MODULE_LICENSE或者有insmod是与GPL不相容的的MODULE_LICENSE的模被
+定是有的。
+
+  2：'F'如果有任何通“insmod -f”被制装的模，' '如果所有模都被正常装。
+
+  3：'S'如果oops生在SMP内核中，行于没有明安全行多理器的硬件。 当前
+情况限于几不支持SMP的速理器。
+
+  4：'R'如果模通“insmod -f”被制装，' '如果所有模都被正常装。
+
+  5：'M'如果任何理器告了机器常，' '如果没有生机器常。
+
+  6：'B'如果放函数了一个的引用或者一些非期的志。
+
+  7：'U'如果用或者用用程序特求置染志，否' '。
+
+  8：'D'如果内核死掉，比如有OOPS或者BUG。
+
+使用'Tainted: '字符串的主要原因是要告内核者，是否是一个干的内核亦或
+生了任何的不正常的事。染是永久的：即使出的模已被卸了，染仍然存在，
+以表明内核不再得信任。

@@ -1,0 +1,538 @@
+Chinese translated version of Documentation/HOWTO
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Maintainer: Greg Kroah-Hartman <greg@kroah.com>
+Chinese maintainer: Li Yang <leoli@freescale.com>
+---------------------------------------------------------------------
+Documentation/HOWTO 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+英文版者： Greg Kroah-Hartman <greg@kroah.com>
+中文版者： 李  Li Yang <leoli@freescale.com>
+中文版翻者： 李  Li Yang <leoli@freescale.com>
+中文版校者： 宇  TripleX Chung <xxx.phy@gmail.com>
+               琦  Maggie Chen <chenqi@beyondsoft.com>
+               王  Wang Cong <xiyou.wangcong@gmail.com>
+
+以下正文
+---------------------------------------------------------------------
+
+如何参与Linux内核
+---------------------
+
+是一篇将如何参与Linux内核的相一网打尽的秘笈。它将指
+成一名Linux内核者，并且学会如何同Linux内核社区合作。它尽可能不
+包括任何于内核程的技，但会指引一条得些知的正途径。
+
+如果篇文章中的任何内容不再用，文末列出的文件者送丁。
+
+
+入
+----
+
+想了解如何成一名Linux内核者？或者老板吩咐“个写个Linux
+程序”？篇文章的目的就是教会成些目的全部，它将描述需
+要的流程以及出如何同内核社区合作的一些提示。它将解内核社区
+何作。
+
+Linux内核大部分是由C言写成的，一些体系相的代用到了言。要
+参与内核，必精通C言。除非想某个架底代，否并
+不需要了解（任何体系的）言。下面列的籍然不能替代扎的C
+言教育和多年的，但如果需要的，做参考是不的：
+ - "The C Programming Language" by Kernighan and Ritchie [Prentice Hall]
+   《C程序言（第2版新版）》（徐宝文 李志 ）[机械工出版社]
+ - "Practical C Programming" by Steve Oualline [O'Reilly]
+   《用C言程（第三版）》（郭大海 ）[中国力出版社]
+ - "C:  A Reference Manual" by Harbison and Steele [Prentice Hall]
+   《C言参考手册（原第5版）》（邱仲潘 等）[机械工出版社]
+
+Linux内核使用GNU C和GNU工具。然它遵循ISO C89准，但也用到了一些
+准中没有定的展。内核是自自足的C境，不依于准C的支持，所以
+并不支持C准中的部分定。比如long long型的大数除法和浮点算就不允
+使用。有候很弄清楚内核工具的要求和它所使用的展，不幸的是目
+前没有明的参考料可以解它。gcc信息（使用“info gcc”命令
+示）得一些方面信息。
+
+住是在学怎和已存在的社区打交道。它由一群形形色色的人成，
+他代、格和程有着很高的准。些准是在期践中出来的，
+于地理上分散的大型。它已被很好得整理成档，建在
+之前尽可能多的学些准，而不要期望人来或者公司的行方式。
+
+
+法律
+--------
+
+Linux内核源代都是在GPL（通用公共可）的保下布的。要了解可
+的看源代主目下的COPYING文件。如果它有更深入系
+律，而不要在Linux内核件上提。因件里的人并不是律，不要期
+望他的有法律效力。
+
+于GPL的常和解答，以下接：
+	http://www.gnu.org/licenses/gpl-faq.html
+
+
+文档
+----
+
+Linux内核代中包含有大量的文档。些文档于学如何与内核社区互有着
+不可估量的价。当一个新的功能被加入内核，最好把解如何使用个功能的文
+档也放内核。当内核的改致面向用空的接口生化，最好将相信
+息或手册(manpages)的丁到mtk.manpages@gmail.com，以向手册(manpages)
+的者解些化。
+
+以下是内核代中需要的文档：
+  README
+    文件要介了Linux内核的背景，并且描述了如何配置和内核。内核的
+    新用从里始。
+
+  Documentation/Changes
+    文件出了用来和使用内核所需要的最小件包列表。
+
+  Documentation/CodingStyle
+    描述Linux内核的代格和理由。所有新代需要遵守篇文档中定的
+    范。大多数者只会接收符合定的丁，很多人也只会忙符合格
+    的代。
+
+  Documentation/SubmittingPatches
+  Documentation/SubmittingDrivers
+    文档明描述如何建和送丁，其中包括（但不限于)：
+       - 件内容
+       - 件格式
+       - 收件人
+    遵守些定并不能保提交成功（因所有丁需要通格的内容和格
+    ），但是忽他几乎就意味着失。
+
+    其他于如何正地生成丁的秀文档包括：
+    "The Perfect Patch"
+        http://www.zip.com.au/~akpm/linux/patches/stuff/tpp.txt
+    "Linux kernel patch submission format"
+        http://linux.yyz.us/patch-format.html
+
+  Documentation/stable_api_nonsense.txt
+    内核什特意不包括定的内核内部API，也就是不包括像的特
+    性：
+       - 子系中（了兼容性？）
+       - 在不同操作系易于移植的程序
+       - （甚至阻止）内核代的快速化
+    篇文档于理解Linux的哲学至重要。于将平台从其他操作系
+    移到Linux的人来也很重要。
+
+  Documentation/SecurityBugs
+    如果自己了Linux内核的安全性，根据篇文档中的来
+    提醒其他内核者并助解决个。
+
+  Documentation/ManagementStyle
+    描述内核者的工作方法及其共有特点。于接触内核（或者
+    它感到好奇）的人来很重要，因它解了很多于内核者独特行的
+    普遍解与迷惑。
+
+  Documentation/stable_kernel_rules.txt
+    解了定版内核布的，以及如何将改放入些版本的。
+
+  Documentation/kernel-docs.txt
+    有助于内核的外部文档列表。如果在内核自的文档中没有找到想找
+    的内容，可以看些文档。
+
+  Documentation/applying-patches.txt
+    于丁是什以及如何将它打在不同内核分支上的好介
+
+内核有大量从代自生成的文档。它包含内核内部API的全面介以及如何
+妥善理加的。生成的文档会放在 Documentation/DocBook/目下。在内
+核源的主目中使用以下不同命令将会分生成PDF、Postscript、HTML和手册
+等不同格式的文档：
+    make pdfdocs
+    make psdocs
+    make htmldocs
+    make mandocs
+
+
+如何成内核者
+------------------
+如果Linux内核一无所知，“Linux内核新手”：
+	http://kernelnewbies.org
+它有一个可以各最基本的内核的件列表（在提之前一定要得
+找已往的件，是否有人已回答相同的）。它有一个可以得
+反的IRC聊天道，以及大量于学Linux内核相当有助的文档。
+
+网站要介了源代、子系分以及目前正在行的目（包括内核
+中的和独的）。它提供了一些基本的助信息，比如如何内核和打
+丁。
+
+如果想加入内核社区并助完成一些任，却找不到从里始，可以
+“Linux内核房管”：
+	http://janitor.kernelnewbies.org/
+是佳的起点。它提供一个相的任列表，列出内核代中需要被重新
+整理或者改正的地方。通和个的者一同工作，会学到将丁
+集成内核的基本原理。如果没有决定下一要做什的，可能会得到方
+向性的指点。
+
+如果已有一些成的代想要放到内核中，但是需要一些助来使它有正
+的格式。“内核”。个就是用来助完成个目的。它
+是一个件列表，地址如下：
+	http://selenic.com/mailman/listinfo/kernel-mentors
+
+在真正手修改内核代之前，理解要修改的代如何作是必需的。要到个
+目的，没什法比直接代更有效了（大多数花招都会有相的注），而且
+一些特制的工具可以提供助。例如，“Linux代交叉引用”目就是一个得
+特推荐的助工具，它将源代示在有目和索引的网上。其中一个更新及
+的内核源，可以通以下地址：
+	http://sosdg.org/~coywolf/lxr/
+
+
+流程
+--------
+
+目前Linux内核流程包括几个“主内核分支”和很多子系相的内核分支。
+些分支包括：
+  - 2.6.x主内核源
+  - 2.6.x.y -stable内核源
+  - 2.6.x -git内核丁集
+  - 2.6.x -mm内核丁集
+  - 子系相的内核源和丁集
+
+
+2.6.x内核主源
+-----------------
+2.6.x内核是由Linus Torvalds（Linux的造者）自的。可以在
+kernel.org网站的pub/linux/kernel/v2.6/目下找到它。它的遵循以下
+：
+  - 当一个新版本的内核被布，期周的集成窗口将被打。在段里
+    者可以向Linus提交大段的修改，通常些修改已被放到-mm内核中几个
+    星期了。提交大量修改的首方式是使用git工具（内核的代版本管理工具
+    ，更多的信息可以在http://git.or.cz/取），不使用普通丁也是可以
+    的。
+  - 个星期以后-rc1版本内核布。之后只有不包含可能影整个内核定性的
+    新功能的丁才可能被接受。注意一个全新的程序（或者文件系）有
+    可能在-rc1后被接受是因的修改完全独立，不会影其他的代，所以
+    没有造成内核退的。在-rc1以后也可以用git向Linus提交丁，不所
+    有的丁需要同被送到相的公件列表以征意。
+  - 当Linus当前的git源已到一个合理健全的状足以布供人
+    ，一个新的-rc版本就会被布。是周都布新的-rc版本。
+  - 个程一直持下去直到内核被到足定的状，持大概是
+    6个星期。
+  - 以下地址跟踪了在个-rc布中的退列表：
+    http://kernelnewbies.org/known_regressions
+
+于内核布，得一提的是Andrew Morton在linux-kernel件列表中如是：
+	“没有人知道新内核何会被布，因布是根据已知bug的情况来决定
+	的，而不是根据一个事先制定好的表。”
+
+
+2.6.x.y -stable（定版）内核源
+-----------------------------------
+由4个数字成的内核版本号明此内核是-stable版本。它包含基于2.6.x版本
+内核的相小且至重要的修，些修安全性或者重的内核退。
+
+版本的内核用于那些期望得最新的定版内核并且不想参与版或
+者版的用。
+
+如果没有2.6.x.y版本内核存在，那最新的2.6.x版本内核就相当于是当前的定
+版内核。
+
+2.6.x.y版本由“定版”小（件地址<stable@kernel.org>），一般隔周
+布新版本。
+
+内核源中的Documentation/stable_kernel_rules.txt文件具体描述了可被定
+版内核接受的修改型以及布的流程。
+
+
+2.6.x -git丁集
+----------------
+Linus的内核源的日快照，个源是由git工具管理的（由此得名）。
+些丁通常天更新以反映Linus的源的最新状。它比-rc版本的内核源
+更具性，因个丁集是全自生成的，没有任何人来其是否真正
+健全。
+
+
+2.6.x -mm丁集
+---------------
+是由Andrew Morton的性内核丁集。Andrew将所有子系的内核源
+和丁到一起，并且加入了大量从linux-kernel件列表中采集的丁。个
+源是新功能和丁的。当丁在-mm丁集里明了其价以后Andrew
+或者相子系的者会将丁Linus以便集成主内核源。
+
+在将所有新丁Linus以集成到主内核源之前，我非常鼓励先把些
+丁放在-mm版内核源中行。
+
+些内核版本不合在需要定行的系上行，因行它比行任何其他
+内核分支都更具有。
+
+如果想内核程提供助，并使用些内核版本，并在
+linux-kernel件列表中提供反，告大家遇到了是一切正常。
+
+通常-mm版丁集不光包括些外的性丁，包括布-git版主源
+中的改。
+
+-mm版内核没有固定的布周期，但是通常在个-rc版内核布之都会有若干
+个-mm版内核布（一般是1至3个）。
+
+
+子系相内核源和丁集
+----------------------------
+相当一部分内核子系者会公他自己的源，以便其他人能了解内
+核的不同域正在生的事情。如上所述，些源会被集成到-mm版本内核中。
+
+下面是目前可用的一些内核源的列表：
+  通git管理的源：
+    - Kbuild源， Sam Ravnborg <sam@ravnborg.org>
+	git.kernel.org:/pub/scm/linux/kernel/git/sam/kbuild.git
+
+    - ACPI源, Len Brown <len.brown@intel.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/lenb/linux-acpi-2.6.git
+
+    - 源, Jens Axboe <axboe@suse.de>
+	git.kernel.org:/pub/scm/linux/kernel/git/axboe/linux-2.6-block.git
+
+    - DRM源, Dave Airlie <airlied@linux.ie>
+	git.kernel.org:/pub/scm/linux/kernel/git/airlied/drm-2.6.git
+
+    - ia64源, Tony Luck <tony.luck@intel.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/aegl/linux-2.6.git
+
+    - ieee1394源, Jody McIntyre <scjody@modernduck.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/scjody/ieee1394.git
+
+    - infiniband源, Roland Dreier <rolandd@cisco.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/roland/infiniband.git
+
+    - libata源, Jeff Garzik <jgarzik@pobox.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/jgarzik/libata-dev.git
+
+    - 网程序源, Jeff Garzik <jgarzik@pobox.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/jgarzik/netdev-2.6.git
+
+    - pcmcia源, Dominik Brodowski <linux@dominikbrodowski.net>
+	git.kernel.org:/pub/scm/linux/kernel/git/brodo/pcmcia-2.6.git
+
+    - SCSI源, James Bottomley <James.Bottomley@SteelEye.com>
+	git.kernel.org:/pub/scm/linux/kernel/git/jejb/scsi-misc-2.6.git
+
+  使用quilt管理的丁集：
+    - USB, PCI, 程序核心和I2C, Greg Kroah-Hartman <gregkh@suse.de>
+	kernel.org/pub/linux/kernel/people/gregkh/gregkh-2.6/
+    - x86-64, 部分i386, Andi Kleen <ak@suse.de>
+	ftp.firstfloor.org:/pub/ak/x86_64/quilt/
+
+  其他内核源可以在http://git.kernel.org的列表中和MAINTAINERS文件里
+  找到。
+
+告bug
+-------
+
+bugzilla.kernel.org是Linux内核者用来跟踪内核Bug的网站。我鼓励用
+在个工具中告找到的所有bug。如何使用内核bugzilla的：
+	http://test.kernel.org/bugzilla/faq.html
+
+内核源主目中的REPORTING-BUGS文件里有一个很好的模板。它指用如何
+告可能的内核bug以及需要提供些信息来助内核者找到的根源。
+
+
+利用bug告
+-----------
+
+内核技能的最好法就是修改其他人告的bug。不光可以助内核
+得更加定，可以学会如何解决从而提高自己的技能，并且其他
+者感受到的存在。修改bug是得其他者誉的最好法，因并不是很多
+人都喜浪去修改人告的bug。
+
+要修改已知的bug，http://bugzilla.kernel.org网址。如果想得
+最新bug的通知，可以bugme-new件列表（只有新的bug告会被寄到里）
+或者bugme-janitor件列表（所有bugzilla的都会被寄到里）。
+
+	http://lists.osdl.org/mailman/listinfo/bugme-new
+	http://lists.osdl.org/mailman/listinfo/bugme-janitors
+
+
+件列表
+--------
+
+正如上面的文档所描述，大多数的骨干内核者都加入了Linux Kernel件列
+表。如何和退列表的可以在里找到：
+	http://vger.kernel.org/vger-lists.html#linux-kernel
+网上很多地方都有个件列表的存档(archive)。可以使用搜索引擎来找到些
+存档。比如：
+	http://dir.gmane.org/gmane.linux.kernel
+在信之前，我烈建先在存档中搜索想要的。很多已被
+的只在件列表的存档中可以找到。
+
+大多数内核子系也有自己独立的件列表来各自的工作。从
+MAINTAINERS文件中可以找到不同的件列表。
+
+很多件列表架在kernel.org服器上。些列表的信息可以在里找到：
+	http://vger.kernel.org/vger-lists.html
+
+在使用些件列表，住保持良好的行。下面的接提供了与些列
+表（或任何其它件列表）交流的一些，然内容有点充数。
+	http://www.albion.com/netiquette/
+
+当有很多人回的件，件的抄送列表会得很。不要将任何人从抄送
+列表中除，除非有足的理由做。也不要只回到件列表。于同
+一封件接收次（一封来自送者一封来自件列表），而不要通添加一
+些奇特的件来解决个，人不会喜的。
+
+住保留所回内容的上下文和源。在回件的部保留“某某某到……”
+几行。将的加在被引用的段落之而不要放在件的部。
+
+如果在件中附丁，它是可以直接的文本（如
+Documentation/SubmittingPatches文档中所述）。内核者不希望遇到附件
+或者被了的丁。只有才能保他可以直接的行代。保
+使用的件送程序不会修改空格和制表符。一个防范性的方法是先将件
+送自己，然后自己是否可以利地打上收到的丁。如果不成功，
+整或者更的件送程序直到它正工作止。
+
+而言之，尊重其他的件列表者。
+
+
+同内核社区合作
+----------------
+
+内核社区的目就是提供尽善尽美的内核。所以当提交丁期望被接受内核的
+候，它的技价以及其他方面都将被。那可能会得到什？
+  - 批
+  - 
+  - 要求修改
+  - 要求明修改的必要性
+  - 默
+
+要住，些是把丁放内核的正常情况。必学会听取丁的批和，
+从技面估它，然后要重写的丁要明扼要地修改是不必要
+的。如果的件没有得到任何回，几天后再一次，因有信件会湮
+没在茫茫信海中。
+
+不做的事情：
+  - 期望自己的丁不受任何疑就直接被接受
+  - 翻
+  - 忽略人的
+  - 没有按照人的要求做任何修改就重新提交
+
+在一个努力追最好技方案的社区里，于一个丁有多少好会有不同的
+解。必要抱着合作的度，愿意改自己的点来内核的格。或者至少
+愿意去明的想法是有价的。住，犯是允的，只要愿意朝着正的
+方案去努力。
+
+如果的第一个丁来的是一堆修改建，是很正常的。并不代表的丁
+不会被接受，也不意味着有人和作。只需要改正所有提出的然后重新
+送的丁。
+
+内核社区和公司文化的差
+------------------------
+
+内核社区的工作模式同大多数公司伍的工作模式并不相同。下面些例
+子，可以助避免某些可能生：
+  用些介的修改提案会有好：
+    - 它同解决了多个
+    - 它除了2000行代
+    - 是丁，它已解了我想要明的
+    - 我在5不同的体系上它……
+    - 是一系列小丁用来……
+    - 个修改提高了普通机器的性能……
+
+  避免如下的法：
+    - 我在AIX/ptx/Solaris就是做的，所以做肯定是好的……
+    - 我做行已20年了，所以……
+    - 了我公司考必做
+    - 是我的企品所需要的
+    - 里是描述我点的1000文档
+    - 是一个5000行的丁用来……
+    - 我重写了在乱七八糟的代，就是……
+    - 我被定了最后期限，所以个丁需要立刻被接受
+
+外一个内核社区与大部分公司的件伍不同的地方是无法面面地交
+流。使用子件和IRC聊天工具做主要通工具的一个好是性和族
+将会更少。Linux内核的工作境更能接受女和少数族群，因个人在人眼
+里只是一个件地址。国化也助了公平的，因无法通姓名来判断人
+的性。男人有可能叫李，女人也有可能叫王。大多数在Linux内核上工作
+并表看法的女性在linux上工作的都出了正面的价。
+
+于一些不使用英的人来，言可能是一个引起的障碍。在件列表
+中要正地表想法必需良好地掌握言，所以建在送件之前最好一
+下英文写得是否正。
+
+
+拆分修改
+--------
+
+Linux内核社区并不喜一下接收大段的代。修改需要被恰当地介、并且
+拆分成独立的小段。几乎完全和公司中的背道而。的想法在最
+始的段就大家知道，就可以及得正在行的的反。
+也会社区得是在和他作，而不是把他当作新功能的象。
+无如何，不要一次性地向件列表送50封信，的丁序列永用不到
+多。
+
+将丁拆的原因如下：
+
+1) 小的丁更有可能被接受，因它不需要太多的和精力去其正性。
+   一个5行的丁，可能在者看了一眼以后就会被接受。而500行的丁
+   需要数个小来其正性（所需随丁大小增加大呈指数增）。
+
+   当出了的候，小的丁也会得非常容易。一个一个丁地回溯
+   将会比仔剖析一个被打上的大丁（个丁破坏了其他西）容易得多。
+
+2）不光送小的丁很重要，在提交之前重新排、化（或者重新排列）
+   丁也是很重要的。
+
+里有内核者Al Viro打的一个比方：
+	“想象一个老正在学生批改数学作。老并不希望看到学生了得
+	到正解法所行的和生的。他希望看到的是最干最雅的
+	解答。好学生了解点，不会把最解决之前的中方案提交上去。”
+
+	内核也是。者和者不希望看到一个人在解决的思
+	考程。他只希望看到和雅的解决方案。
+
+直接出一流的解决方案，和社区一起作尚未完成的工作，者之似乎
+很找到一个平衡点。所以最好尽早始收集有利于行改的反；同也要
+保修改分成很多小，在整个目都准好被包含内核之前，其中的一部
+分可能会先被接收。
+
+必了解做是不可接受的：将未完成的工作提交内核，然后再找修
+。
+
+
+明修改的必要性
+----------------
+除了将丁拆成小，很重要的一点是Linux社区了解他什需要修改。
+必明新功能是有人需要的并且是有用的。
+
+
+修改
+--------
+
+当送丁的候，需要特留意件正文的内容。因里的信息将会做
+丁的修改(ChangeLog)，会被一直保留以大家。它需要完全地描述丁，
+包括：
+  - 什需要个修改
+  - 丁的体
+  - 
+  - 果
+
+想了解它具体看起来像什，以下文档中的“ChangeLog”章：
+  “The Perfect Patch”
+      http://www.zip.com.au/~akpm/linux/patches/stuff/tpp.txt
+
+
+些事情有候做起来很。要在任何方面都做到完美可能需要好几年。是
+一个持提高的程，它需要大量的耐心和决心。只要不放弃，一定可以做到。
+很多人已做到了，而他都曾和在的站在同的起点上。
+
+
+---------------
+感Paolo Ciarrocchi允“流程”部分基于他所写的文章
+(http://linux.tar.bz/articles/2.6-development_process)，感Randy
+Dunlap和Gerrit Huizenga完善了和不的列表。感Pat Mochel, Hanna
+Linder, Randy Dunlap, Kay Sievers, Vojtech Pavlik, Jan Kara, Josh Boyer,
+Kees Cook, Andrew Morton, Andi Kleen, Vadim Lobanov, Jesper Juhl, Adrian
+Bunk, Keri Harris, Frans Pop, David A. Wheeler, Junio Hamano, Michael
+Kerrisk和Alex Shepard的、建和献。没有他的助，篇文档是不可
+能完成的。
+
+
+
+英文版者： Greg Kroah-Hartman <greg@kroah.com>

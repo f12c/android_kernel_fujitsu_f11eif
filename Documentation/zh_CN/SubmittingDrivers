@@ -1,0 +1,168 @@
+Chinese translated version of Documentation/SubmittingDrivers
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Chinese maintainer: Li Yang <leo@zh-kernel.org>
+---------------------------------------------------------------------
+Documentation/SubmittingDrivers 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+中文版者： 李  Li Yang <leo@zh-kernel.org>
+中文版翻者： 李  Li Yang <leo@zh-kernel.org>
+中文版校者： 琦 Maggie Chen <chenqi@beyondsoft.com>
+               王 Wang Cong <xiyou.wangcong@gmail.com>
+               巍 Zhang Wei <Wei.Zhang@freescale.com>
+
+以下正文
+---------------------------------------------------------------------
+
+如何向 Linux 内核提交程序
+-----------------------------
+
+篇文档将会解如何向不同的内核源提交程序。注意，如果感
+趣的是程序，也 XFree86 目(http://www.xfree86.org/)
+和／或 X.org 目 (http://x.org)。
+
+参 Documentation/SubmittingPatches 文档。
+
+
+分配号
+----------
+
+和字符的主号与从号是由 Linux 命名号分配威 LANANA（
+在是 Torben Mathiasen）分配。申的网址是 http://www.lanana.org/。
+即使不准提交到主流内核的也需要在里分配号。有信息，
+参 Documentation/devices.txt。
+
+如果使用的不是已分配的号，那当提交的候，它将会被
+制分配一个新的号，即便个号和之前客的截然不同。
+
+的提交象
+------------------
+
+Linux 2.0:
+	此内核源不接受新的程序。
+
+Linux 2.2:
+	此内核源不接受新的程序。
+
+Linux 2.4:
+	如果所属的代域在内核的 MAINTAINERS 文件中列有一个者，
+	那将程序提交他。如果此者没有回或者找不到恰当的
+	者，那系 Willy Tarreau <w@1wt.eu>。
+
+Linux 2.6:
+	除了遵循和 2.4 版内核同的外，需要在 linux-kernel 件
+	列表上跟踪最新的 API 化。向 Linux 2.6 内核提交的系人
+	是 Andrew Morton <akpm@osdl.org>。
+
+决定能否被接受的条件
+----------------------------
+
+可：		代必使用 GNU 通用公可 (GPL) 提交 Linux，但是
+		我并不要求 GPL 是唯一的可。或会希望同使用多
+		可布，如果希望程序可以被其他源社区（比如BSD）
+		使用。参考 include/linux/module.h 文件中所列出的可被
+		接受共存的可。
+
+版：		版所有者必同意使用 GPL 可。最好提交者和版所有者
+		是相同个人或体。否，必需列出授使用 GPL 的版所有
+		人或体，以之需。
+
+接口：		如果的程序使用成的接口并且和其他同的程序行
+		相似，而不是去明无的新接口，那它将会更容易被接受。
+		如果需要一个 Linux 和 NT 的通用接口，那在用
+		空它。
+
+代：		使用 Documentation/CodingStyle 中所描述的 Linux 代
+		格。如果的某些代段（例如那些与 Windows 程序包共
+		享的代段）需要使用其他格式，而却只希望一代，
+		那将它很好地区分出来，并且注明原因。
+
+可移植性：	注意，指并不永是 32 位的，不是所有的算机都使用小
+		尾模式 (little endian) 存数据，不是所有的人都有浮点
+		元，不要随便在的程序里嵌入 x86 指令。只能在
+		x86 上行的程序一般是不受迎的。然可能只有 x86
+		硬件，很程序在其他平台上是否可用，但是保代
+		可以被松地移植却是很的。
+
+清晰度：	做到所有人都能修个程序将会很有好，因将
+		会直接收到修的丁而不是 bug 告。如果提交一个
+		藏硬件工作机理的程序，那它将会被。
+
+源管理：	因 Linux 正在被很多移和面系使用，所以的
+		程序也很有可能被使用在些上。它支持最基本的
+		源管理，即在需要的情况下系休眠和醒要用到的
+		.suspend 和 .resume 函数。的程序是否能正
+		地理休眠与醒，如果在无法，至少把 .suspend
+		函数定成返回 -ENOSYS（功能未）。
+		保的在什都不干的情况下将耗降到最低。要得
+		程序的指，参
+		Documentation/power/drivers-testing.txt。有程序
+		源管理相全面的概述，参
+		Documentation/power/devices.txt。
+
+管理：		如果一个程序的作者在行有效的，那通常除了那
+		些明正且不需要任何的丁以外，其他所有的丁都会
+		被作者。如果希望成程序的系人和更新者，最
+		好在代注中写明并且在 MAINTAINERS 文件中加入个
+		程序的条目。
+
+不影能否被接受的条件
+------------------------------
+
+供商：	由硬件供商来程序通常是一件好事。不，如果源
+		里已有其他人提供了可定工作的程序，那不要期
+		望“我是供商”会成内核改用的程序的理由。理想的情
+		况是：供商与有程序的作者合作，建一个一完美的
+		程序。
+
+作者：		程序是由大的 Linux 公司研是由个人写，并不影
+		其是否能被内核接受。没有人内核源享有特。只要
+		充分了解内核社区，就会一点。
+
+
+源列表
+--------
+
+Linux 内核主源：
+	ftp.??.kernel.org:/pub/linux/kernel/...
+	?? == 的国家代，例如 "cn"、"us"、"uk"、"fr" 等等
+
+Linux 内核件列表：
+	linux-kernel@vger.kernel.org
+	[可通向majordomo@vger.kernel.org件来]
+
+Linux 程序，第三版（探 2.6.10 版内核）：
+	http://lwn.net/Kernel/LDD3/ （免版）
+
+LWN.net:
+	周内核活摘要 - http://lwn.net/
+	2.6 版中 API 的更：
+		http://lwn.net/Articles/2.6-kernel-api/
+	将旧版内核的程序移植到 2.6 版：
+		http://lwn.net/Articles/driver-porting/
+
+KernelTrap：
+	Linux 内核的最新以及者
+	http://kerneltrap.org/
+
+内核新手(KernelNewbies):
+	新的内核者提供文档和助
+	http://kernelnewbies.org/
+
+Linux USB目：
+	http://www.linux-usb.org/
+
+写内核的“不要”（Arjan van de Ven著）:
+	http://www.fenrus.org/how-to-not-write-a-device-driver-paper.pdf
+
+内核清工 (Kernel Janitor):
+	http://janitor.kernelnewbies.org/

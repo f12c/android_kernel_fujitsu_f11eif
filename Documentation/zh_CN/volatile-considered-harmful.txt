@@ -1,0 +1,113 @@
+Chinese translated version of Documentation/volatile-considered-harmful.txt
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Maintainer: Jonathan Corbet <corbet@lwn.net>
+Chinese maintainer: Bryan Wu <bryan.wu@analog.com>
+---------------------------------------------------------------------
+Documentation/volatile-considered-harmful.txt 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+英文版者： Jonathan Corbet <corbet@lwn.net>
+中文版者： 伍  Bryan Wu <bryan.wu@analog.com>
+中文版翻者： 伍  Bryan Wu <bryan.wu@analog.com>
+中文版校者：   Eugene Teo <eugeneteo@kernel.sg>
+               瑞  Dave Young <hidave.darkstar@gmail.com>
+以下正文
+---------------------------------------------------------------------
+
+什不使用“volatile”型
+------------------------------
+
+C程序通常volatile表示某个量可以在当前行的程之外被改；因此，在内核
+中用到共享数据，常常会有C程序喜使用volatile量。句，他
+常会把volatile型看成某易的原子量，当然它不是。在内核中使用volatile几
+乎是的；本文档将解什。
+
+理解volatile的是知道它的目的是用来消除化，上很少有人真正需要的
+用。在内核中，程序必防止意外的并破坏共享的数据，其是一个完全
+不同的任。用来防止意外并的保措施，可以更加高效的避免大多数化相的
+。
+
+像volatile一，内核提供了很多原来保并的数据安全（自旋, 互斥量,内
+存屏障等等），同可以防止意外的化。如果可以正使用些内核原，那就没有
+必要再使用volatile。如果仍然必使用volatile，那几乎可以肯定在代的某有一
+个bug。在正的内核代中，volatile能来的是使事情慢。
+
+思考一下段典型的内核代：
+
+    spin_lock(&the_lock);
+    do_something_on(&shared_data);
+    do_something_else_with(&shared_data);
+    spin_unlock(&the_lock);
+
+如果所有的代都遵循加，当持有the_lock的候，不可能意外的改shared_data的
+。任何可能数据的其他代都会在个上等待。自旋原跟内存屏障一―― 它
+式的用来写成 ―― 意味着数据不会跨越它而被化。所以本来器
+它知道在shared_data里面将有什，但是因spin_lock()用跟内存屏障一，会制
+器忘它所知道的一切。那在些数据不会有化的。
+
+如果shared_data被声名volatile，操作将仍然是必的。就算我知道没有其他人正在
+使用它，器也将被阻止化界区内shared_data的。在有效的同，
+shared_data不是volatile的。在理共享数据的候，当的操作可以不再需要
+volatile ―― 并且是有潜在危害的。
+
+volatile的存型最初是那些内存映射的I/O寄存器而定。在内核里，寄存器也
+被保，但是人也不希望器“化”界区内的寄存器。内核里I/O的内存
+是通函数完成的；不成通指I/O内存的直接，并且不是在所有体系架上
+都能工作。那些函数正是了防止意外化而写的，因此，再一次，volatile型不
+是必需的。
+
+一引起用可能使用volatile的情况是当理器正忙着等待一个量的。正行一
+个忙等待的方法是：
+
+    while (my_variable != what_i_want)
+        cpu_relax();
+
+cpu_relax()用会降低CPU的能量消耗或者位于超程双理器；它也作内存屏障一出
+，所以，再一次，volatile不是必需的。当然，忙等待一始就是一反常的做法。
+
+在内核中，一些稀少的情况下volatile仍然是有意的：
+
+  - 在一些体系架的系上，允直接的I/0内存，那前面提到的函数可以使用
+    volatile。基本上，一个函数用它自己都是一个小的界区域并且保了按照
+    程序期望的那生操作。
+
+  - 某些会改内存的内代然没有什其他明的附作用，但是有被GCC除的可
+    能性。在声明中加上volatile字可以防止除操作。
+
+  - Jiffies量是一特殊情况，然次引用它的候都可以有不同的，但jiffies
+    量不需要任何特殊的加保。所以jiffies量可以使用volatile，但是不成
+    其他跟jiffies相同型量使用volatile。Jiffies被是一“愚蠢的留物"
+    （Linus的）因解决个比保持状要麻的多。
+
+  - 由于某些I/0可能会修改一致的内存,所以有,指向一致内存的数据
+    的指需要正的使用volatile。网配器使用的状存区正是情形的一个例
+    子，其中配器用改指来表示些描述符已理了。
+
+于大多代，上述几可以使用volatile的情况都不用。所以，使用volatile是一
+bug并且需要的代外仔。那些使用volatile的人需要退一想想
+他真正想的是什。
+
+非常迎除volatile量的丁 － 只要明些丁完整的考了并。
+
+注
+----
+
+[1] http://lwn.net/Articles/233481/
+[2] http://lwn.net/Articles/233482/
+
+致
+----
+
+最初由Randy Dunlap推并作初研究
+由Jonathan Corbet撰写
+参考Satyam Sharma，Johannes Stezenbach，Jesper Juhl，Heikki Orsila，
+H. Peter Anvin，Philipp Hahn和Stefan Richter的意改善了本档。

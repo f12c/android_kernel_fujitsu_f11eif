@@ -1,0 +1,9 @@
+#
+# Fujitsu I2CUART Exchange driver
+#
+
+config FUJITSU_F11EIF_I2CUART
+	bool "Fujitsu I2CUART Exchange driver support"
+	default y
+	help
+	  Say Y here to enable based i2cuart support.

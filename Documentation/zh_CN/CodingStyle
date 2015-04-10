@@ -1,0 +1,701 @@
+Chinese translated version of Documentation/CodingStyle
+
+If you have any comment or update to the content, please post to LKML directly.
+However, if you have problem communicating in English you can also ask the
+Chinese maintainer for help.  Contact the Chinese maintainer, if this
+translation is outdated or there is problem with translation.
+
+Chinese maintainer: Zhang Le <r0bertz@gentoo.org>
+---------------------------------------------------------------------
+Documentation/CodingStyle的中文翻
+
+如果想或更新本文的内容，直接信到LKML。如果使用英文交流有困的，也可
+以向中文版者求助。如果本翻更新不及或者翻存在，系中文版者。
+
+中文版者：  Zhang Le <r0bertz@gentoo.org>
+中文版翻者：  Zhang Le <r0bertz@gentoo.org>
+中文版校者： 王 Wang Cong <xiyou.wangcong@gmail.com>
+               wheelz <kernel.zeng@gmail.com>
+               管旭 Xudong Guan <xudong.guan@gmail.com>
+               Li Zefan <lizf@cn.fujitsu.com>
+               Wang Chen <wangchen@cn.fujitsu.com>
+以下正文
+---------------------------------------------------------------------
+
+		Linux内核代格
+
+是一个短的文档，描述了linux内核的首代格。代格是因人而的，而且我
+不愿意把我的点加任何人，不里所述的是我必要的代所遵守的格，
+并且我也希望大多数其他代也能遵守个格。在写代至少考一下本文所述的
+格。
+
+首先，我建打印一GNU代范，然后不要它。了它，是一个具有重大象征性
+意的作。
+
+不管怎，在我始：
+
+
+	 	第一章：
+
+制表符是8个字符，所以也是8个字符。有些端将4（乃至2）个字符
+深，几乎相当于将周率的定3。
+
+理由：的全部意就在于清楚的定一个控制起止于何。尤其是当着的屏幕
+看了20小之后，将会大一点的会使更容易分辨。
+
+在，有些人会抱怨8个字符的会使代向右移的太，在80个字符的端屏幕上
+就很的代。个的答案是，如果需要3以上的，不管用何方式
+的代已有了，修正的程序。
+
+而言之，8个字符的可以代更容易，有一个好是当的函数嵌套太深的
+候可以警告。留心个警告。
+
+在switch句中消除多的首的方式是“switch”和从属于它的“case”于同
+一列，而不要“次”“case”。比如：
+
+	switch (suffix) {
+	case 'G':
+	case 'g':
+		mem <<= 30;
+		break;
+	case 'M':
+	case 'm':
+		mem <<= 20;
+		break;
+	case 'K':
+	case 'k':
+		mem <<= 10;
+		/* fall through */
+	default:
+		break;
+	}
+
+
+不要把多个句放在一行里，除非有什西要藏：
+
+	if (condition) do_this;
+	  do_something_everytime;
+
+也不要在一行里放多个句。内核代格超。就是避免可能致人的表
+式。
+
+除了注、文档和Kconfig之外，不要使用空格来，前面的例子是例外，是有意之。
+
+用一个好的器，不要在行尾留空格。
+
+
+		第二章：把的行和字符串打散
+
+代格的意就在于使用平常使用的工具来持代的可性和可性。
+
+一行的度的限制是80列，我烈建遵守个例。
+
+于80列的句要打散成有意的片段。个片段要明短于原来的句，而且放置的位置
+也明的靠右。同的也用于有很参数列表的函数。字符串也要打散成短的
+字符串。唯一的例外是超80列可以大幅度提高可性并且不会藏信息的情况。
+
+void fun(int a, int b, int c)
+{
+	if (condition)
+		printk(KERN_WARNING "Warning this is a long printk with "
+						"3 parameters a: %u b: %u "
+						"c: %u \n", a, b, c);
+	else
+		next_statement;
+}
+
+		第三章：大括号和空格的放置
+
+C言格中外一个常是大括号的放置。和大小不同，或弃用某放置策
+略并没有多少技上的原因，不首的方式，就像Kernighan和Ritchie展示我的，是
+把起始大括号放在行尾，而把束大括号放在行首，所以：
+
+	if (x is true) {
+		we do y
+	}
+
+用于所有的非函数句（if、switch、for、while、do）。比如：
+
+	switch (action) {
+	case KOBJ_ADD:
+		return "add";
+	case KOBJ_REMOVE:
+		return "remove";
+	case KOBJ_CHANGE:
+		return "change";
+	default:
+		return NULL;
+	}
+
+不，有一个例外，那就是函数：函数的起始大括号放置于下一行的，所以：
+
+	int function(int x)
+	{
+		body of function
+	}
+
+全世界的端可能会抱怨个不一致性是…………不一致的，不所有思健全的人都知道（
+a）K&R是_正的_，并且（b）K&R是正的。此外，不管怎函数都是特殊的（在C言中
+，函数是不能嵌套的）。
+
+注意束大括号独自占据一行，除非它后面跟着同一个句的剩余部分，也就是do句中的
+“while”或者if句中的“else”，像：
+
+	do {
+		body of do-loop
+	} while (condition);
+
+和
+
+	if (x == y) {
+		..
+	} else if (x > y) {
+		...
+	} else {
+		....
+	}
+
+理由：K&R。
+
+也注意大括号的放置方式也能使空（或者差不多空的）行的数量最小化，同不失可
+性。因此，由于的屏幕上的新行是不可再生源（想想25行的端屏幕），将会有更
+多的空行来放置注。
+
+当只有一个独的句的候，不用加不必要的大括号。
+
+if (condition)
+	action();
+
+点不用于本身某个条件句的一个分支的独句。需要在个分支里都使用大
+括号。
+
+if (condition) {
+	do_this();
+	do_that();
+} else {
+	otherwise();
+}
+
+		3.1：空格
+
+Linux内核的空格使用方式（主要）取决于它是用于函数是字。（大多数）字后
+要加一个空格。得注意的例外是sizeof、typeof、alignof和__attribute__，些字
+某些程度上看起来更像函数（它在Linux里也常常伴随小括号而使用，尽管在C言里
+的小括号不是必需的，就像“struct fileinfo info”声明后的“sizeof info”）。
+
+所以在些字之后放一个空格：
+	if, switch, case, for, do, while
+但是不要在sizeof、typeof、alignof或者__attribute__些字之后放空格。例如，
+	s = sizeof(struct file);
+
+不要在小括号里的表式加空格。是一个反例：
+
+	s = sizeof( struct file );
+
+当声明指型或者返回指型的函数，“*”的首使用方式是使之靠近量名或者函
+数名，而不是靠近型名。例子：
+
+	char *linux_banner;
+	unsigned long long memparse(char *ptr, char **retptr);
+	char *match_strdup(substring_t *s);
+
+在大多数二元和三元操作符使用一个空格，例如下面所有些操作符：
+
+	=  +  -  <  >  *  /  %  |  &  ^  <=  >=  ==  !=  ?  :
+
+但是一元操作符后不要加空格：
+	&  *  +  -  ~  !  sizeof  typeof  alignof  __attribute__  defined
+
+后自加和自一元操作符前不加空格：
+	++  --
+
+前自加和自一元操作符后不加空格：
+	++  --
+
+“.”和“->”体成操作符前后不加空格。
+
+不要在行尾留空白。有些可以自的器会在新行的行首加入量的空白，然后
+就可以直接在那一行入代。不假如最后没有在那一行入代，有些器就不
+会移除已加入的空白，就像故意留下一个只有空白的行。包含行尾空白的行就
+生了。
+
+当git丁包含了行尾空白的候会警告，并且可以的要求去掉行尾空白；不
+如果是正在打一系列丁，做会致后面的丁失，因改了丁的上下文。
+
+
+		第四章：命名
+
+C是一个朴的言，的命名也。和Modula-2和Pascal程序不同，C程序不使
+用似ThisVariableIsATemporaryCounter的名字。C程序会称那个量“tmp”
+，写起来会更容易，而且至少不会令其于理解。
+
+不，然混用大小写的名字是不提倡使用的，但是全局量是需要一个具描述性的名字
+。称一个全局函数“foo”是一个以恕的。
+
+全局量（只有当真正需要它的候再用它）需要有一个具描述性的名字，就像全局函
+数。如果有一个可以算活用数量的函数，叫它“count_active_users()”或者
+似的名字，不叫它“cntuser()”。
+
+在函数名中包含函数型（所的匈牙利命名法）是子出了――器知道那些型而
+且能那些型，做只能把程序弄糊了。怪微是制造出有的程序。
+
+本地量名短，而且能表相的含。如果有一些随机的整数型的循数器
+，它被称“i”。叫它“loop_counter”并无益，如果它没有被解的可能的。似
+的，“tmp”可以用来称呼任意型的量。
+
+如果怕混淆了的本地量名，就遇到一个了，叫做函数增荷蒙失衡合症
+。看第六章（函数）。
+
+
+		第五章：Typedef
+
+不要使用似“vps_t”之的西。
+
+体和指使用typedef是一个。当在代里看到：
+
+	vps_t a;
+
+代表什意思？
+
+相反，如果是
+
+	struct virtual_container *a;
+
+就知道“a”是什了。
+
+很多人typedef“能提高可性”。不是的。它只在下列情况下有用：
+
+ (a) 完全不透明的象（情况下要主使用typedef来藏个象上是什）。
+
+     例如：“pte_t”等不透明象，只能用合的函数来它。
+
+     注意！不透明性和“函数”本身是不好的。我使用pte_t等型的原因在于真的是
+     完全没有任何共用的可信息。
+
+ (b) 清楚的整数型，如此，抽象就可以助消除到底是“int”是“long”的混淆。
+
+     u8/u16/u32是完全没有的typedef，不它更符合(d)而不是里。
+
+     再次注意！要做，必事出有因。如果某个量是“unsigned long“，那没有必要
+
+	typedef unsigned long myflags_t;
+
+     不如果有一个明的原因，比如它在某情况下可能会是一个“unsigned int”而在
+     其他情况下可能“unsigned long”，那就不要犹豫，必使用typedef。
+
+ (c) 当使用sparse按字面的建一个新型来做型的候。
+
+ (d) 和准C99型相同的型，在某些例外的情况下。
+
+     然眼睛和筋来新的准型比如“uint32_t”不需要花很多，可是有些
+     人仍然拒使用它。
+
+     因此，Linux特有的等同于准型的“u8/u16/u32/u64”型和它的有符号型是被
+     允的――尽管在自己的新代中，它不是制要求要使用的。
+
+     当已使用了某个型集的已有代，遵循那些代中已做出的。
+
+ (e) 可以在用空安全使用的型。
+
+     在某些用空可的体里，我不能要求C99型而且不能用上面提到的“u32”
+     型。因此，我在与用空共享的所有体中使用__u32和似的型。
+
+可能有其他的情况，不基本的是永不要使用typedef，除非可以明的用上
+述某个中的一个。
+
+的来，如果一个指或者一个体里的元素可以合理的被直接到，那它就不
+是一个typedef。
+
+
+		第六章：函数
+
+函数短而漂亮，并且只完成一件事情。函数可以一屏或者屏示完（我都知
+道ISO/ANSI屏幕大小是80x24），只做一件事情，而且把它做好。
+
+一个函数的最大度是和函数的度和数成反比的。所以，如果有一个理上
+很的只有一个很（但是）的case句的函数，而且需要在个case里做很多很
+小的事情，的函数尽管很，但也是可以的。
+
+不，如果有一个的函数，而且疑一个天分不是很高的高中一年学生可能甚至
+不清楚个函数的目的，格的遵守前面提到的度限制。使用助函数，并之
+取个具描述性的名字（如果得它的性能很重要的，可以器内它，的
+效果往往会比写一个函数的效果要好。）
+
+函数的外一个衡量准是本地量的数量。此数量不超5－10个，否的函数就有
+了。重新考一下的函数，把它分拆成更小的函数。人的大一般可以松的同跟
+踪7个不同的事物，如果再增多的，就会糊了。即便人，也可能会不清2
+个星期前做的事情。
+
+在源文件里，使用空行隔不同的函数。如果函数需要被出，它的EXPORT*宏
+在它的束大括号之下。比如：
+
+int system_is_up(void)
+{
+	return system_state == SYSTEM_RUNNING;
+}
+EXPORT_SYMBOL(system_is_up);
+
+在函数原型中，包含函数名和它的数据型。然C言里没有的要求，在Linux里
+是提倡的做法，因可以很的者提供更多的有价的信息。
+
+
+		第七章：集中的函数退出途径
+
+然被某些人声称已，但是goto句的等价物是常被器所使用，具体形式是
+无条件跳指令。
+
+当一个函数从多个位置退出并且需要做一些通用的清理工作的候，goto的好就出来
+了。
+
+理由是：
+
+- 无条件句容易理解和跟踪
+- 嵌套程度小
+- 可以避免由于修改忘更新某个独的退出点而致的
+- 了器的工作，无需除冗余代;)
+
+int fun(int a)
+{
+	int result = 0;
+	char *buffer = kmalloc(SIZE);
+
+	if (buffer == NULL)
+		return -ENOMEM;
+
+	if (condition1) {
+		while (loop1) {
+			...
+		}
+		result = 1;
+		goto out;
+	}
+	...
+out:
+	kfree(buffer);
+	return result;
+}
+
+		第八章：注
+
+注是好的，不有度注的危。永不要在注里解的代是如何作的：更好
+的做法是人一看的代就可以明白，解写的很差的代是浪。
+
+一般的，想要的注告人的代做了什，而不是怎做的。也不要把注
+放在一个函数体内部：如果函数到需要独立的注其中的一部分，很可能需要回到
+第六章看一看。可以做一些小注来注明或警告某些很明（或者槽）的做法，但不要
+加太多。做的，是把注放在函数的部，告人它做了什，也可以加上它做
+些事情的原因。
+
+当注内核API函数，使用kernel-doc格式。看
+Documentation/kernel-doc-nano-HOWTO.txt和scripts/kernel-doc以得信息。
+
+Linux的注格是C89“/* ... */”格。不要使用C99格“// ...”注。
+
+（多行）的首注格是：
+
+	/*
+	 * This is the preferred style for multi-line
+	 * comments in the Linux kernel source code.
+	 * Please use it consistently.
+	 *
+	 * Description:  A column of asterisks on the left side,
+	 * with beginning and ending almost-blank lines.
+	 */
+
+注数据也是很重要的，不管是基本型是衍生型。了方便一点，一行只
+声明一个数据（不要使用逗号来一次声明多个数据）。就有空来个数据写一段
+小注来解它的用途了。
+
+
+		第九章：已把事情弄糟了
+
+没什，我都是。可能的使用了很Unix的朋友已告“GNU emacs”能
+自格式化C源代，而且也注意到了，是，不它所使用的默和我
+想要的相去甚（上，甚至比随机打的要差――无数个猴子在GNU emacs里打字永不
+会造出一个好程序）（注：参考Infinite Monkey Theorem）
+
+所以要放弃GNU emacs，要改它它使用更合理的定。要采用后一个方案，可
+以把下面段粘到的.emacs文件里。
+
+(defun linux-c-mode ()
+  "C mode with adjusted defaults for use with the Linux kernel."
+  (interactive)
+  (c-mode)
+  (c-set-style "K&R")
+  (setq tab-width 8)
+  (setq indent-tabs-mode t)
+  (setq c-basic-offset 8))
+
+就定了M-x linux-c-mode命令。当hack一个模的候，如果把字符串
+-*- linux-c -*-放在行的某个位置，个模式将会被自用。如果希望在修改
+/usr/src/linux里的文件魔般自打linux-c-mode的，也可能需要添加
+
+(setq auto-mode-alist (cons '("/usr/src/linux.*/.*\\.[ch]$" . linux-c-mode)
+			auto-mode-alist))
+
+到的.emacs文件里。
+
+不就算emacs正的格式化代失了，也并不意味着失去了一切：可以用“
+indent”。
+
+不，GNU indent也有和GNU emacs一有的定，所以需要它一些命令。不
+，不算太糟，因就算是GNU indent的作者也同K&R的威性（GNU的人并不是坏
+人，他只是在个上被重的了），所以只要indent指定“-kr -i8”
+（代表“K&R，8个字符”），或者使用“scripts/Lindent”，就可以以最髦的方式
+源代。
+
+“indent”有很多，特是重新格式化注的候，可能需要看一下它的手册。不
+住：“indent”不能修正坏的程。
+
+
+		第十章：Kconfig配置文件
+
+于遍布源的所有Kconfig*配置文件来，它方式与C代相比有所不同。挨
+在“config”定下面的行一个制表符，助信息再多2个空格。比如：
+
+config AUDIT
+	bool "Auditing support"
+	depends on NET
+	help
+	  Enable auditing infrastructure that can be used with another
+	  kernel subsystem, such as SELinux (which requires this for
+	  logging of avc messages output).  Does not do system-call
+	  auditing without CONFIG_AUDITSYSCALL.
+
+仍然被不定的功能被定依于“EXPERIMENTAL”：
+
+config SLUB
+	depends on EXPERIMENTAL && !ARCH_USES_SLAB_PAGE_STRUCT
+	bool "SLUB (Unqueued Allocator)"
+	...
+
+而那些危的功能（比如某些文件系的写支持）在它的提示字符串里著的声明
+一点：
+
+config ADFS_FS_RW
+	bool "ADFS write support (DANGEROUS)"
+	depends on ADFS_FS
+	...
+
+要看配置文件的完整文档，看Documentation/kbuild/kconfig-language.txt。
+
+
+		第十一章：数据
+
+如果一个数据，在建和它的行境之外可，那它必要有一个引用
+数器。内核里没有收集（并且内核之外的收集慢且效率低下），意味着需
+要数据的使用情况。
+
+引用数意味着能避免上，并且允多个用并行个数据――而不需要担心
+个数据因不被使用就消失了，那些用可能不是睡了一或者做了一
+些其他事情而已。
+
+注意上不能取代引用数。上是了保持数据的一致性，而引用数是一个内存管
+理技巧。通常二者都需要，不要把个混了。
+
+很多数据上有2引用数，它通常有不同“”的用。子数器子用
+的数量，当子数器至零，全局数器一。
+
+“多引用数”的例子可以在内存管理（“struct mm_struct”：mm_users和mm_count）
+和文件系（“struct super_block”：s_count和s_active）中找到。
+
+住：如果一个行索可以找到的数据，但是个数据没有引用数器，
+里几乎肯定是一个bug。
+
+
+		第十二章：宏，枚和RTL
+
+用于定常量的宏的名字及枚里的需要大写。
+
+#define CONSTANT 0x12345
+
+在定几个相的常量，最好用枚。
+
+宏的名字用大写字母，不形如函数的宏的名字可以用小写字母。
+
+一般的，如果能写成内函数就不要写成像函数的宏。
+
+含有多个句的宏被包含在一个do-while代里：
+
+#define macrofun(a, b, c) 			\
+	do {					\
+		if (a == 5)			\
+			do_this(b, c);		\
+	} while (0)
+
+使用宏的候避免的事情：
+
+1) 影控制流程的宏：
+
+#define FOO(x)					\
+	do {					\
+		if (blah(x) < 0)		\
+			return -EBUGGERED;	\
+	} while(0)
+
+非常不好。它看起来像一个函数，不却能致“用”它的函数退出；不要打乱者大里
+的法分析器。
+
+2) 依于一个固定名字的本地量的宏：
+
+#define FOO(val) bar(index, val)
+
+可能看起来像是个不的西，不它非常容易把代的人糊，而且容易致看起来
+不相的改来。
+
+3) 作左的参数的宏： FOO(x) = y；如果有人把FOO成一个内函数的，用
+法就会出了。
+
+4) 忘了先：使用表式定常量的宏必将表式置于一小括号之内。参数的
+宏也要注意此。
+
+#define CONSTANT 0x4000
+#define CONSTEXP (CONSTANT | 3)
+
+cpp手册宏的解很。Gcc internals手册也解了RTL（注：register
+transfer language），内核里的言常用到它。
+
+
+		第十三章：打印内核消息
+
+内核者是受良好教育的。一定注意内核信息的写，以人以好的印象。不要
+用不范的比如“dont”，而要用“do not”或者“don't”。保些信息、明了、无
+。
+
+内核信息不必以句号（注：英文句号，即点）束。
+
+在小括号里打印数字(%d)没有任何价，避免做。
+
+<linux/device.h>里有一些模型断宏，使用它，以保信息于正的
+和，并且被了正的消息。些宏有：dev_err(), dev_warn(),
+dev_info()等等。于那些不和某个特定相的信息，<linux/kernel.h>定了
+pr_debug()和pr_info()。
+
+写出好的信息可以是一个很大的挑；当写出来之后，些信息在程除的候
+就会成大的助。当DEBUG符号没有被定的候，些信息不被内核里
+（也就是，默地，它不被包含在内）。如果使用dev_dbg()或者pr_debug()，
+就能自到个效果。很多子系有Kconfig来用-DDEBUG。有一个相的例
+是使用VERBOSE_DEBUG来添加dev_vdbg()消息到那些已由DEBUG用的消息之上。
+
+
+		第十四章：分配内存
+
+内核提供了下面的一般用途的内存分配函数：kmalloc()，kzalloc()，kcalloc()和
+vmalloc()。参考API文档以取有它的信息。
+
+体大小的首形式是的：
+
+	p = kmalloc(sizeof(*p), ...);
+
+外一方式中，sizeof的操作数是体的名字，会降低可性，并且可能会引
+入bug。有可能指量型被改，而的内存分配函数的sizeof的果不。
+
+制一个void指返回是多余的。C言本身保了从void指到其他任何指型
+的是没有的。
+
+
+		第十五章：内弊病
+
+有一个常的解是内函数是gcc提供的可以代行更快的一个。然使用内
+函数有候是恰当的（比如作一替代宏的方式，看第十二章），不很多情况下不是
+。inline字的度使用会使内核大，从而使整个系行速度慢。因大内核
+会占用更多的指令高速存（注：一存通常是指令存和数据存分的）而且会
+致pagecache的可用内存少。想象一下，一次pagecache未命中就会致一次磁址，将
+耗5毫秒。5毫秒的内CPU能行很多很多指令。
+
+一个基本的原是如果一个函数有3行以上，就不要把它成内函数。个原的一个例
+外是，如果知道某个参数是一个常量，而且因个常量定器在能
+化掉的函数的大部分代，那仍然可以它加上inline字。kmalloc()内函数就
+是一个很好的例子。
+
+人常主static的而且只用了一次的函数加上inline，如此不会有任何失，因没
+有什好衡的。然从技上是正的，但是上情况下即使不加inline gcc
+也可以自使其内。而且其他用可能会要求移除inline，由此而来的争会抵消inline
+自身的潜在价，得不失。
+
+
+		第十六章：函数返回及命名
+
+函数可以返回很多不同型的，最常的一是表明函数行成功或者失的。
+的一个可以表示一个代整数（-Exxx＝失，0＝成功）或者一个“成功”布（
+0＝失，非0＝成功）。
+
+混合使用表方式是于的bug的来源。如果C言本身格区分整形和布型
+量，那器就能我些……不C言不区分。了避免生bug，
+遵循下面的例：
+
+	如果函数的名字是一个作或者制性的命令，那个函数返回代整
+	数。如果是一个判断，那函数返回一个“成功”布。
+
+比如，“add work”是一个命令，所以add_work()函数在成功返回0，在失返回-EBUSY。
+似的，因“PCI device present”是一个判断，所以pci_dev_present()函数在成功找到
+一个匹配的返回1，如果找不到返回0。
+
+所有出（注：EXPORT）的函数都必遵守个例，所有的公共函数也都如此。私
+有（static）函数不需要如此，但是我也推荐做。
+
+返回是算果而不是算是否成功的志的函数不受此例的限制。一般的，他
+通返回一些正常范之外的果来表示出。典型的例子是返回指的函数，他使用
+NULL或者ERR_PTR机制来告。
+
+
+		第十七章：不要重新明内核宏
+
+文件include/linux/kernel.h包含了一些宏，使用它，而不要自己写一些它的
+。比如，如果需要算一个数的度，使用个宏
+
+  #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+似的，如果要算某体成的大小，使用
+
+  #define FIELD_SIZEOF(t, f) (sizeof(((t*)0)->f))
+
+有可以做格的型的min()和max()宏，如果需要可以使用它。可以自己看看
+那个文件里定了什可以拿来用的西，如果有定的，就不在的代里
+自己重新定。
+
+
+		第十八章：器模式行和其他需要的事情
+
+有一些器可以解嵌入在源文件里的由一些特殊明的配置信息。比如，emacs
+能解被成的行：
+
+-*- mode: c -*-
+
+或者的：
+
+/*
+Local Variables:
+compile-command: "gcc -DMAGIC_DEBUG_FLAG foo.c"
+End:
+*/
+
+Vim能解的：
+
+/* vim:set sw=8 noet */
+
+不要在源代中包含任何的内容。个人都有他自己的器配置，的源文件不
+覆盖人的配置。包括有和模式配置的。人可以使用他自己定制的模
+式，或者使用其他可以生正的的巧妙方法。
+
+
+
+		附 I：参考
+
+The C Programming Language, 第二版, 作者Brian W. Kernighan和Denni
+M. Ritchie. Prentice Hall, Inc., 1988. ISBN 0-13-110362-8 (皮),
+0-13-110370-9 (硬皮). URL: http://cm.bell-labs.com/cm/cs/cbook/
+
+The Practice of Programming 作者Brian W. Kernighan和Rob Pike.  Addison-Wesley,
+Inc., 1999.  ISBN 0-201-61586-X.  URL: http://cm.bell-labs.com/cm/cs/tpop/
+
+cpp，gcc，gcc internals和indent的GNU手册――和K&R及本文相符合的部分，全部可以在
+http://www.gnu.org/manual/找到
+
+WG14是C言的国准化工作，URL: http://www.open-std.org/JTC1/SC22/WG14/
+
+Kernel CodingStyle，作者greg@kroah.com表于OLS 2002：
+http://www.kroah.com/linux/talks/ols_2002_kernel_codingstyle_talk/html/
+
+--
+最后更新于2007年7月13日。

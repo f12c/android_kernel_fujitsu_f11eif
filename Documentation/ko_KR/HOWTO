@@ -1,0 +1,625 @@
+NOTE:
+This is a version of Documentation/HOWTO translated into korean
+This document is maintained by minchan Kim <minchan.kim@gmail.com>
+If you find any difference between this document and the original file or
+a problem with the translation, please contact the maintainer of this file.
+
+Please also note that the purpose of this file is to be easier to
+read for non English (read: korean) speakers and is not intended as
+a fork. So if you have any comments or updates for this file please
+try to update the original English file first.
+
+==================================
+ 
+Documentation/HOWTO
+  .
+
+ÅF  <minchan.kim@gmail.com>
+ÅF  <jamee.lee@samsung.com>
+==================================
+
+    
+---------------------------------
+
+       .  
+         
+ .      
+        
+ .
+
+        
+ .
+
+
+
+----
+
+,        ? 
+"     " 
+?         
+         
+.
+
+  C      
+  .    C    .
+   low-level    
+( )     .
+    C    
+     
+ - "The C Programming Language" by Kernighan and Ritchie [Prentice Hall]
+ - "Practical C Programming" by Steve Oualline [O'Reilly]
+ - "C:  A Reference Manual" by Harbison and Steele [Prentice Hall]
+
+ GNU C GNU   .   ISO C89 
+        .   C
+  freestanding C  C  
+ .  long long  floating point  .
+          
+          
+   .    gcc info (`info gcc`)
+.
+
+         
+. , ,       
+  .       
+          .
+         
+  .     
+     .
+
+
+ 
+---------
+
+    GPL (release).  
+       COPYING
+ .        
+      . 
+        
+   .
+
+GPL      .
+    http://www.gnu.org/licenses/gpl-faq.html
+
+
+
+----
+
+         
+   .      ,
+         
+  .    
+        
+mtk.manpages@gmail.com    .
+
+        .
+  README
+             
+        .    
+     .
+
+  Documentation/Changes
+            
+        .
+
+  Documentation/CodingStyle
+              .
+           . 
+            
+           .
+
+  Documentation/SubmittingPatches
+  Documentation/SubmittingDrivers
+            
+       (   ).
+       - Email 
+       - Email 
+       -   
+        (:    )
+     (     
+      ).     
+      .
+
+            .
+    "The Perfect Patch"
+        http://www.zip.com.au/~akpm/linux/patches/stuff/tpp.txt
+    "Linux kernel patch submission format"
+        http://linux.yyz.us/patch-format.html
+
+   Documentation/stable_api_nonsense.txt
+         API   
+         .
+       -  shim-layer( ?)
+       -   
+       -       (    )
+            
+        .
+
+
+  Documentation/SecurityBugs
+            
+              
+     .
+
+  Documentation/ManagementStyle
+            
+        .    
+     (      )
+       .     
+            
+    .
+
+  Documentation/stable_kernel_rules.txt
+            
+           
+       .
+
+  Documentation/kernel-docs.txt
+         .    
+             
+    .
+
+  Documentation/applying-patches.txt
+           
+          .
+
+          
+ .    API   ,  
+      .  
+Documentation/DocBook/    PDF, Postscript, HTML,
+ man      .
+         make pdfdocs
+         make psdocs
+         make htmldocs
+         make mandocs
+      .
+
+
+   
+---------------------
+
+       Linux KernelNewbies
+  .
+    http://kernelnewbies.org
+       (  
+ .     )  
+   .      IRC 
+          .
+
+ , ,   
+( ,  )     . 
+          .
+
+         
+      Janitor  .
+         http://janitor.kernelnewbies.org/
+   .     
+       .  
+        
+        
+          
+.
+
+         
+        
+ kernel-mentors  .   
+   .
+         http://selenic.com/mailman/listinfo/kernel-mentors
+
+          
+   .     
+        (
+    ).     
+ Linux Cross-Reference project    
+     .   
+      .
+      http://users.sosdg.org/~qiyong/lxr/
+
+
+ 
+-------------
+
+         ""
+    .   
+  .
+  - main 2.6.x  
+  - 2.6.x.y -   
+  - 2.6.x -git  
+  - 2.6.x -mm  
+  -     
+
+2.6.x  
+---------------
+
+2.6.x  Linux Torvalds  kernel.org pub/linux/kernel/v2.6/
+   .   .
+  -    2  .  
+      diff Linus   .   
+       -mm    .    
+       git(   ,    http://git.or.cz/
+       )      
+     .
+  - 2  -rc1       
+             .
+      ( ) -rc1  
+     .      
+            
+    (:       
+		 )       . -rc1
+      git   Linus   
+           .
+  -  -rc Linus  git tree     
+       .   -rc   
+    .
+  -    "(ready)"  .
+      6 .
+  -  -rc       URI .
+    http://kernelnewbies.org/known_regressions
+
+         
+Andrew Morton  .
+        "    .   
+                 
+            ."
+
+2.6.x.y -   
+------------------------
+
+4      -stable .  2.6.x
+          
+.
+
+        ,
+/         .
+
+ 2.6.x.y         2.6.x
+   .
+
+2.6.x.y "stable" <stable@kernel.org>     
+.
+
+    Documentation/stable_kernel_rules.txt  
+  -stable     
+ .
+
+
+2.6.x -git 
+------------------
+git ( -git  )   Linus
+  snapshot  .     
+Linus    .    
+     -rc    .
+
+2.6.x -mm  
+---------------------
+Andrew Morton     . Andrew  
+        
+    .      
+   .   -mm    
+  Andrew     
+ Linus .
+
+       Linus  
+-mm      .
+
+        
+    .
+
+         
+          
+    .
+
+        
+  -git    .
+
+-mm     .    -mm 
+ -rc (1 3 )  .
+
+   
+-------------------------------
+         
+       .  
+    -mm   .
+
+     .
+  git trees:
+    - Kbuild development tree, Sam Ravnborg < sam@ravnborg.org>
+    git.kernel.org:/pub/scm/linux/kernel/git/sam/kbuild.git
+
+    - ACPI development tree, Len Brown <len.brown@intel.com >
+    git.kernel.org:/pub/scm/linux/kernel/git/lenb/linux-acpi-2.6.git
+
+    - Block development tree, Jens Axboe <jens.axboe@oracle.com>
+    git.kernel.org:/pub/scm/linux/kernel/git/axboe/linux-2.6-block.git
+
+    - DRM development tree, Dave Airlie <airlied@linux.ie>
+    git.kernel.org:/pub/scm/linux/kernel/git/airlied/drm-2.6.git
+
+    - ia64 development tree, Tony Luck < tony.luck@intel.com>
+    git.kernel.org:/pub/scm/linux/kernel/git/aegl/linux-2.6.git
+
+    - infiniband, Roland Dreier <rolandd@cisco.com >
+    git.kernel.org:/pub/scm/linux/kernel/git/roland/infiniband.git
+
+    - libata, Jeff Garzik <jgarzik@pobox.com>
+    git.kernel.org:/pub/scm/linux/kernel/git/jgarzik/libata-dev.git
+
+    - network drivers, Jeff Garzik <jgarzik@pobox.com>
+    git.kernel.org:/pub/scm/linux/kernel/git/jgarzik/netdev-2.6.git
+
+    - pcmcia, Dominik Brodowski < linux@dominikbrodowski.net>
+    git.kernel.org:/pub/scm/linux/kernel/git/brodo/pcmcia-2.6.git
+
+    - SCSI, James Bottomley < James.Bottomley@SteelEye.com>
+    git.kernel.org:/pub/scm/linux/kernel/git/jejb/scsi-misc-2.6.git
+
+  quilt trees:
+    - USB, PCI, Driver Core, and I2C, Greg Kroah-Hartman < gregkh@suse.de>
+    kernel.org/pub/linux/kernel/people/gregkh/gregkh-2.6/
+    - x86-64, partly i386, Andi Kleen < ak@suse.de>
+        ftp.firstfloor.org:/pub/ak/x86_64/quilt/
+
+     http://kernel.org/git MAINTAINERS   
+  .
+
+ 
+---------
+bugzilla.kernel.org       .
+          .
+kernel bugzilla     .
+    http://test.kernel.org/bugzilla/faq.html
+
+     REPORTING-BUGS    
+         
+       .
+
+
+  
+--------------------
+
+          
+   .    
+         
+        
+    .      
+       .   
+        .
+
+       http://bugzilla.kernel.org
+.        
+bugme-new  (     )
+bugme-janitor  (bugzilla     )
+  .
+
+      http://lists.osdl.org/mailman/listinfo/bugme-new
+      http://lists.osdl.org/mailman/listinfo/bugme-janitors
+
+
+
+ 
+---------------
+
+       
+     .   
+       .
+    http://vger.kernel.org/vger-lists.html#linux-kernel
+       .
+     .  :
+      http://dir.gmane.org/gmane.linux.kernel
+          
+     .    
+     .
+
+        
+     .     
+ MAINTAINERS  .
+
+  kernel.org  .      .
+         http://vger.kernel.org/vger-lists.html
+
+       .
+   URL (  )   
+  .
+         http://www.albion.com/netiquette/
+
+     CC:     
+ .   CC     
+ .       
+       mail-header  
+.      .
+
+     .   
+"John  ...."      
+      .
+
+     Documentation/SubmittingPatches
+ (plain)     .  
+    .   
+          
+     .    
+     .    
+      .  
+       
+.
+
+        .
+
+
+  
+--------------------
+
+        . 
+         .
+     ?
+ - 
+ - 
+ -   
+ -   
+ - 
+
+.       . 
+          
+        
+   .         
+  .       .
+
+   ?
+ -        
+ -   
+ -   
+ -        
+
+        
+         . 
+        . 
+      .   
+        
+.
+
+        
+ .       
+        
+.        
+.
+
+
+    
+-----------------------------------------------------------------
+       .  
+    .
+          :
+    - "   ."
+    - " 2000   ."
+    - "      ."
+    - " 5    ..."
+    - "    ..."
+    - "    ..."
+
+          :
+    - "  AIT/ptx/Solaris   .     ..."
+    - " 20  . ..."
+    - "       ."
+    - "      ."
+    - "     1000    ."
+    - " 6  ..."
+    - " 5000   ..."
+    - "    .  ..."
+    - "         ."
+
+      
+       .  irc 
+       
+ .       
+       . 
+         
+     . Andrea   
+Pat       .  
+       
+.
+
+          .
+       
+  .     
+      .
+
+
+  
+------------------------
+
+       (chunk) 
+ .   , , 
+   .     
+ .       .
+          
+.       
+       
+     .    
+50   .    
+  .
+
+    .
+
+1)         .
+           
+     . 5      
+      .  500     
+      (      
+     ).
+
+           
+    . ,        
+          (  
+    )        .
+
+2)        
+   (  )   .
+
+   Al Viro  .
+    "     .  
+          . 
+         .    
+           .
+
+      .    
+          . 
+        ."
+
+         
+      .  
+        
+       
+         
+     .
+
+   "  ."    
+     .
+
+ 
+-----------------
+
+       
+    .    
+      .
+
+
+ 
+-----------------
+
+        
+   .     ChangeLog 
+.          
+.        .
+  -   
+  -     (approach)
+  -  
+  -  
+
+         ChageLog  .
+   "The Perfect Patch"
+    http://www.zip.com.au/~akpm/linux/patches/stuff/tpp.txt
+
+
+
+
+       .     
+  .       . 
+  .       
+        .
+
+
+
+
+----------
+" "(http://linux.tar.gz/articles/2.6-development_process) 
+      Paolo Ciarrocchi
+.           
+Randy Dunlap Gerrit Huizenga .    
+   Pat Mochel, Hanna Linder, Randy Dunlap, Kay Sievers,
+Vojtech Pavlik, Jan Kara, Josh Boyer, Kees Cook, Andrew Morton, Andi Kleen,
+Vadim Lobanov, Jesper Juhl, Adrian Bunk, Keri Harris, Frans Pop,
+David A. Wheeler, Junio Hamano, Michael Kerrisk, and Alex Shepard  .
+       .
+
+
+
+: Greg Kroah-Hartman <greg@kroah.com>

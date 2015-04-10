@@ -1,0 +1,1 @@
+obj-$(CONFIG_FUJITSU_F11EIF_KEYPAD) += f11eif-keypad.o

@@ -1,0 +1,100 @@
+Chinese translated version of Documentation/sparse.txt
+
+If you have any comment or update to the content, please contact the
+original document maintainer directly.  However, if you have a problem
+communicating in English you can also ask the Chinese maintainer for
+help.  Contact the Chinese maintainer if this translation is outdated
+or if there is a problem with the translation.
+
+Chinese maintainer: Li Yang <leo@zh-kernel.org>
+---------------------------------------------------------------------
+Documentation/sparse.txt 的中文翻
+
+如果想或更新本文的内容，直接系原文档的者。如果使用英文
+交流有困的，也可以向中文版者求助。如果本翻更新不及或者翻
+存在，系中文版者。
+
+中文版者： 李  Li Yang <leo@zh-kernel.org>
+中文版翻者： 李  Li Yang <leo@zh-kernel.org>
+
+
+以下正文
+---------------------------------------------------------------------
+
+Copyright 2004 Linus Torvalds
+Copyright 2004 Pavel Machek <pavel@suse.cz>
+Copyright 2006 Bob Copeland <me@bobcopeland.com>
+
+使用 sparse 工具做型
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"__bitwise" 是一型属性，所以使用它：
+
+        typedef int __bitwise pm_request_t;
+
+        enum pm_request {
+                PM_SUSPEND = (__force pm_request_t) 1,
+                PM_RESUME = (__force pm_request_t) 2
+        };
+
+会使 PM_SUSPEND 和 PM_RESUME 成位方式(bitwise)整数（使用"__force"
+是因 sparse 会抱怨改位方式的型，但是里我需要制行
+）。而且因所有枚都使用了相同的型，里的"enum pm_request"也将
+会使用那个型做底。
+
+而且使用 gcc 的候，所有的 __bitwise/__force 都会消失，最后在 gcc
+看来它只不是普通的整数。
+
+坦白来，并不需要使用枚型。上面那些都可以成一个特殊的"int
+__bitwise"型。
+
+所以更的法只要做：
+
+	typedef int __bitwise pm_request_t;
+
+	#define PM_SUSPEND ((__force pm_request_t) 1)
+	#define PM_RESUME ((__force pm_request_t) 2)
+
+在就有了格的型所需要的所有基架。
+
+一个小提醒：常数整数"0"是特殊的。可以直接把常数零当作位方式整数使用而
+不用担心 sparse 会抱怨。是因"bitwise"（恰如其名）是用来保不同位方
+式型不会被弄混（小尾模式，大尾模式，cpu尾模式，或者其他），他来
+常数"0"是特殊的。
+
+取 sparse 工具
+~~~~~~~~~~~~~~~~
+
+可以从 Sparse 的主取最新的布版本：
+
+	http://www.kernel.org/pub/linux/kernel/people/josh/sparse/
+
+或者，也可以使用 git 克隆最新的 sparse 版本：
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/josh/sparse.git
+
+DaveJ 把小自生成的 git 源 tar 包放在以下地址：
+
+	http://www.codemonkey.org.uk/projects/git-snapshots/sparse/
+
+一旦下了源，只要以普通用身行：
+
+	make
+	make install
+
+它将会被自安装到的 ~/bin 目下。
+
+使用 sparse 工具
+~~~~~~~~~~~~~~~~
+
+用"make C=1"命令来内核，会所有重新的 C 文件使用 sparse 工具。
+或者使用"make C=2"命令，无文件是否被重新都会其使用 sparse 工具。
+如果已了内核，用后一方式可以很快地整个源。
+
+make 的可量 CHECKFLAGS 可以用来向 sparse 工具参数。系会自
+向 sparse 工具 -Wbitwise 参数。可以定 __CHECK_ENDIAN__ 来行
+大小尾。
+
+	make C=2 CHECKFLAGS="-D__CHECK_ENDIAN__"
+
+些默都是被的，因他通常会生大量的警告。

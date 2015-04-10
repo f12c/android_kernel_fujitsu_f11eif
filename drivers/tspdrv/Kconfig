@@ -1,0 +1,9 @@
+#
+# TouchSense configuration
+#
+
+menuconfig TSPDRV
+	bool "TouchSense support"
+	default y
+	---help---
+	  This is TouchSense Kconfig.

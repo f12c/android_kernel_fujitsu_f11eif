@@ -1,0 +1,195 @@
+NOTE:
+This is a version of Documentation/stable_api_nonsense.txt translated
+into korean
+This document is maintained by barrios <minchan.kim@gmail.com>
+If you find any difference between this document and the original file or
+a problem with the translation, please contact the maintainer of this file.
+
+Please also note that the purpose of this file is to be easier to
+read for non English (read: korean) speakers and is not intended as
+a fork. So if you have any comments or updates for this file please
+try to update the original English file first.
+
+==================================
+ 
+Documentation/stable_api_nonsense.txt
+  .
+
+ÅF  <minchan.kim@gmail.com>
+ÅF  <jamee.lee@samsung.com>
+==================================
+
+   
+(       )
+
+Greg Kroah-Hartman <greg@kroah.com>
+
+        ,  
+(stable)       .
+        
+    .   
+   syscall .  
+       .  pre 0.9
+  2.6      
+.        
+  .
+
+
+
+----
+       
+     .   
+        
+      .   
+         .  
+ , ,    
+      .
+
+
+
+----
+
+        
+    .     
+    .
+
+,  closed , hidden , binary blobs,  wrappers,  GPL
+          
+        .  
+    .    
+  . (    .  
+          .)
+
+,    .     
+  .      
+    .
+
+
+
+  
+------------------------
+        . 
+     ? .  
+   .
+   -   C       
+      alignmnet    ( inline
+     , )     .  
+             .
+   -          
+      .
+      -       .
+      -       (,  lock
+        non-SMP    ).
+      -   build optoin    align
+        .
+      -      .  
+              
+        .
+
+  C       
+ (configuration)     
+    .      
+         .
+          
+          
+    .      
+(    )     
+.       
+  .
+
+ .       
+   .       ...
+
+
+
+   
+---------------------------------
+
+        
+        
+"  "   .
+
+        
+  .     
+         .
+         
+  .        ,
+   ,    .
+         
+         
+ .
+
+   ,   USB   
+   3   .    
+ .
+   -       . 
+             
+     USB      .
+   - USB  USB      
+             
+     USB      .
+
+    USB    closed 
+  . closed     
+    ,     
+     .
+
+   ,       
+     .    
+ ,       
+,         USB 
+    .   USB    
+            
+ .
+
+     .    
+    .      
+     .  
+       
+        
+.        
+         
+ .
+
+    .   
+    .     
+       
+(       ).
+
+
+  
+---------------
+,          
+  ,    ?   
+        
+        
+.
+
+.       ( 
+GPL        . 
+      .   
+ ).      
+         .
+        
+  .
+
+          .
+   -   ( )     .
+   -        .
+   -        .
+   -        .
+   -         
+        .
+   -          
+      .
+
+    "  (out of the box)"   
+          
+        .
+
+
+
+------
+
+      Randy Dunlap, Andrew Morton, David Brownell,
+Hanna Linder, Robert Love,  Nishanth Aravamudan .
